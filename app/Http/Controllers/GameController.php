@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Game;
+use App\Models\Genre;
+use Illuminate\Http\Request;
+
+class GameController extends Controller
+{
+    /**
+     * Display a listing of the games.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request)
+    {
+        $query = Game::with(['primaryImage', 'genres']);
+        
+        // Apply filters
+        if ($request->has('genre')) {
+            $query->whereHas('genres', function ($q) use ($request) {
+                $q->where('genres.id', $request->genre);
+            });
+        }
+        
+        if ($request->has('min_price')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('price', '>=', $request->min_price)
+                  ->orWhere('discount_price', '>=', $request->min_price);
+            });
+        }
+        
+        if ($request->has('max_price')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('price', '<=', $request->max_price)
+                  ->orWhere('discount_price', '<=', $request->max_price);
+            });
+        }
+        
+        if ($request->has('on_sale') && $request->on_sale) {
+            $query->whereNotNull('discount_price');
+        }
+        
+        // Apply sorting
+        $sortBy = $request->sort_by ?? 'created_at';
+        $sortOrder = $request->sort_order ?? 'desc';
+        
+        $query->orderBy($sortBy, $sortOrder);
+        
+        $games = $query->paginate(15);
+        $genres = Genre::all();
+        
+        return view('games.index', compact('games', 'genres'));
+    }
+    
+    /**
+     * Display the specified game.
+     *
+     * @param  \App\Models\Game  $game
+     * @return \Illuminate\View\View
+     */
+    public function show(Game $game)
+    {
+        $game->load(['images', 'genres', 'reviews.user', 'reviews.likes']);
+        
+        return view('games.show', compact('game'));
+    }
+    
+    /**
+     * Search for games.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        
+        $games = Game::where('title', 'like', "%{$query}%")
+            ->orWhere('description', 'like', "%{$query}%")
+            ->with(['primaryImage', 'genres'])
+            ->paginate(15);
+            
+        return view('games.search', compact('games', 'query'));
+    }
+}
