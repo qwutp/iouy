@@ -1111,11 +1111,11 @@ img {
 .admin-add-btn {
   margin-top: 20px;
   width: 120px;
-  height: 30px;
+  height: 40px;
   border-radius: 8px;
   font-size: 0.75rem;
   text-align: center;
-  padding: 5px;
+  padding: 10px;
   text-decoration: none;
   display: block;
   background-color: var(--color-light-gray);
@@ -1123,9 +1123,10 @@ img {
 
 .admin-header-title {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 5px;
   font-weight: bold;
   color: #ffffff;
+ margin-top: 20px;
 }
 
 .admin-header-subtitle {
@@ -1282,19 +1283,45 @@ img {
 
 .admin-form-submit {
   background-color: #9193A6;
-  width: 200px;
-  height: 30px;
+  width: 150px;
+  height: 40px;
   border-radius: 8px;
+  color: white;
 }
 
 .admin-form-cancel {
   background-color: #474747;
   color: white;
   width: 100px;
+  height: 40px;
   text-align: center;
-  padding-top: 5px;
-  height: 30px;
   border-radius: 8px;
+  padding: 10px;
+}
+
+.label1 {
+  margin-top: 100px;
+}
+
+.admin-form-checkbox {
+    float: inline-start;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-left: 0.5rem;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    width: 150px;
+    height: 50px;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.admin-form-btn {
+  margin-top: -7px;
+  margin-left: 15px;
 }
 
 .admin-form-checkboxes {
@@ -1618,4 +1645,171 @@ img {
   margin: 0;
   font-weight: 500;
   cursor: pointer;
+}
+
+/*игры в админ панели*/
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.admin-form-help {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.admin-form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.admin-form-section-title {
+    font-size: 1.25rem;
+    color: #393a43;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.admin-form-genres {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.admin-form-genre {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.admin-form-genre:hover {
+    background-color: #e8e8e8;
+    border-color: #393a43;
+}
+
+.admin-form-genre input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #393a43;
+}
+
+.admin-form-genre label {
+    font-weight: 500;
+    cursor: pointer;
+    color: #333;
+}
+
+.admin-form-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.admin-form-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.admin-form-option:hover {
+    background-color: #e8e8e8;
+    border-color: #393a43;
+}
+
+.admin-form-option input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 0.25rem;
+    accent-color: #393a43;
+}
+
+.admin-form-option-content label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    color: #333;
+}
+
+.admin-file-input {
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    border: 2px dashed #ccc;
+    width: 100%;
+}
+
+.admin-empty-genres {
+    padding: 2rem;
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.admin-empty-genres p {
+    margin-bottom: 0.5rem;
+    color: #856404;
+}
+
+.admin-empty-genres code {
+    background-color: #f8f9fa;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    color: #e83e8c;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .admin-form-genres,
+    .admin-form-options {
+        grid-template-columns: 1fr;
+    }
 }

@@ -30,22 +30,6 @@
                     @method('PUT')
                     
                     <div class="admin-form-group">
-                        <label for="title">Заголовок баннера</label>
-                        <input type="text" id="title" name="title" value="{{ old('title', $banner->title ?? 'Лучшие игры здесь') }}" required>
-                        @error('title')
-                            <div class="auth-form-error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="admin-form-group">
-                        <label for="subtitle">Подзаголовок</label>
-                        <input type="text" id="subtitle" name="subtitle" value="{{ old('subtitle', $banner->subtitle ?? 'Найдите свою следующую любимую игру') }}" required>
-                        @error('subtitle')
-                            <div class="auth-form-error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
-                    <div class="admin-form-group">
                         <label for="background_image">Фоновое изображение</label>
                         <input type="file" id="background_image" name="background_image" accept="image/*">
                         @if(isset($banner) && $banner->background_image)

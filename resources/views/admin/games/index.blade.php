@@ -11,7 +11,7 @@
                 
             </div>
             <p class="admin-header-subtitle">Просмотр и управление каталогом игр</p>
-            <a href="{{ route('admin.games.create') }}" class="admin-add-btn">+ Добавить игру</a>
+            <a href="{{ route('admin.games.create') }}" class="admin-add-btn">Добавить игру</a>
         </div>
         
         @if(session('success'))
@@ -76,7 +76,7 @@
                 <div class="admin-empty-state">
                     <h3>Здесь еще нет игр</h3>
                     <p>Добавьте первую игру в каталог, чтобы начать работу</p>
-                    <a href="{{ route('admin.games.create') }}" class="admin-add-btn">+ Добавить игру</a>
+                    <a href="{{ route('admin.games.create') }}" class="admin-add-btn">Добавить игру</a>
                 </div>
             @endif
         </div>
