@@ -88,10 +88,10 @@
                                         onclick="toggleWishlist(this)">
                                     @if($inWishlist)
                                         <i class="fas fa-heart"></i>
-                                        В избранном
+                                        В желаемом
                                     @else
                                         <i class="far fa-heart"></i>
-                                        В избранное
+                                        В желаемое
                                     @endif
                                 </button>
                             </div>
@@ -183,7 +183,7 @@ function toggleWishlist(button) {
         .then(data => {
             if (data.success) {
                 button.classList.remove('in-wishlist');
-                button.innerHTML = '<i class="far fa-heart"></i> В избранное';
+                button.innerHTML = '<i class="far fa-heart"></i> В желаемое';
                 updateWishlistCounter();
             } else {
             }
@@ -211,7 +211,7 @@ function toggleWishlist(button) {
         .then(data => {
             if (data.success) {
                 button.classList.add('in-wishlist');
-                button.innerHTML = '<i class="fas fa-heart"></i> В избранном';
+                button.innerHTML = '<i class="fas fa-heart"></i> В желаемом';
                 updateWishlistCounter();
             } else {
             }

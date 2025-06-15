@@ -1,357 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-.game-detail {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.game-detail-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 3rem;
-}
-
-.game-gallery {
-    position: relative;
-}
-
-.game-gallery img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-}
-
-.game-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.game-info-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #393A43;
-    margin: 0;
-}
-
-.game-info-genres {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.game-info-genre {
-    background: linear-gradient(135deg, #393A43, #2c2d35);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.game-info-price {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.game-info-current-price {
-    color: #393A43;
-}
-
-.game-info-old-price {
-    text-decoration: line-through;
-    color: #999;
-    font-size: 1.25rem;
-}
-
-.game-info-discount {
-    background: #e74c3c;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 1rem;
-}
-
-.game-info-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.game-info-cart-btn {
-    flex: 2;
-    background: linear-gradient(135deg, #393A43, #2c2d35);
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 12px;
-    font-size: 1.125rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.game-info-cart-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(57, 58, 67, 0.3);
-}
-
-.game-info-cart-btn.in-cart {
-    background: #28a745;
-}
-
-.game-info-wishlist-btn {
-    flex: 1;
-    background: white;
-    border: 2px solid #393A43;
-    color: #393A43;
-    padding: 1rem;
-    border-radius: 12px;
-    font-size: 1.125rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.game-info-wishlist-btn:hover {
-    background: #393A43;
-    color: white;
-    transform: translateY(-2px);
-}
-
-.game-info-wishlist-btn.in-wishlist {
-    background: #dc3545;
-    border-color: #dc3545;
-    color: white;
-}
-
-.game-description {
-    margin-bottom: 3rem;
-    background-color: #f8f9fa;
-    padding: 2rem;
-    border-radius: 12px;
-}
-
-.game-requirements {
-    margin-bottom: 3rem;
-}
-
-.game-description-title, .game-requirements-title {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: #393A43;
-    margin-bottom: 1rem;
-}
-
-.game-description-content, .game-requirements-content {
-    line-height: 1.6;
-    color: #666;
-}
-
-.game-requirements-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-}
-
-.game-requirements-section {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 12px;
-}
-
-.game-requirements-section-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #393A43;
-    margin-bottom: 1rem;
-}
-
-.review-section {
-    margin-top: 3rem;
-}
-
-.review-login-prompt {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 12px;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.review-login-prompt a {
-    color: #393A43;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.review-login-prompt a:hover {
-    text-decoration: underline;
-}
-
-.game-images-gallery {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.game-images-gallery img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.game-images-gallery img:hover {
-    transform: scale(1.05);
-}
-
-.review-item {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.review-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.review-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 1rem;
-    object-fit: cover;
-}
-
-.review-user {
-    font-weight: 600;
-    color: #393A43;
-}
-
-.review-date {
-    color: #777;
-    font-size: 0.875rem;
-    margin-left: auto;
-}
-
-.review-rating {
-    color: #ffc107;
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-}
-
-.review-content {
-    color: #555;
-    line-height: 1.6;
-}
-
-.review-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    justify-content: flex-end;
-}
-
-.review-btn {
-    background: #f0f0f0;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.review-btn:hover {
-    background: #e0e0e0;
-}
-
-.review-btn-edit {
-    color: #2c3e50;
-}
-
-.review-btn-delete {
-    color: #e74c3c;
-}
-
-.review-edit-form {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-top: 1rem;
-    border: 1px solid #e0e0e0;
-}
-
-.alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.game-info-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.game-info-stars {
-    display: flex;
-    gap: 2px;
-}
-
-.game-info-star {
-    color: #ddd;
-    font-size: 1.25rem;
-}
-
-.game-info-star.active {
-    color: #ffc107;
-}
-
-.game-info-rating-text {
-    font-size: 1rem;
-    color: #666;
-    font-weight: 500;
-}
-</style>
 
 <div class="game-detail">
     <div class="game-detail-header">
@@ -414,7 +63,8 @@
                     @endphp
                     
                     <button type="button" 
-                            class="game-info-cart-btn {{ $inCart ? 'in-cart' : '' }}" 
+                    style="height: 50px; font-size: 17px"
+                            class="btn-add-to-wishlist {{ $inCart ? 'in-cart' : '' }}" 
                             data-game-id="{{ $game->id }}"
                             onclick="toggleGameCart(this)">
                         <i class="fas fa-shopping-cart"></i>
@@ -422,11 +72,12 @@
                     </button>
                     
                     <button type="button" 
-                            class="game-info-wishlist-btn {{ $inWishlist ? 'in-wishlist' : '' }}" 
+                    style="height: 50px; font-size: 17px"
+                            class="btn-add-to-wishlist {{ $inWishlist ? 'in-wishlist' : '' }}" 
                             data-game-id="{{ $game->id }}"
                             onclick="toggleGameWishlist(this)">
                         <i class="{{ $inWishlist ? 'fas' : 'far' }} fa-heart"></i>
-                        <span>{{ $inWishlist ? 'Убрать' : 'В желаемое' }}</span>
+                        <span>{{ $inWishlist ? 'В желаемом' : 'В желаемое' }}</span>
                     </button>
                 @else
                     <a href="{{ route('login') }}" class="game-info-cart-btn">Войти для покупки</a>
@@ -627,16 +278,13 @@ function toggleEditForm(reviewId) {
 }
 
 function setRating(element, rating, inputId) {
-    // Reset all stars
     const stars = element.parentElement.querySelectorAll('.rating-star');
     stars.forEach(star => star.classList.remove('active'));
     
-    // Set active stars
     for (let i = 0; i < rating; i++) {
         stars[i].classList.add('active');
     }
     
-    // Set hidden input value
     document.getElementById(inputId).value = rating;
 }
 
@@ -717,7 +365,7 @@ function toggleGameWishlist(button) {
             } else {
                 button.classList.add('in-wishlist');
                 icon.className = 'fas fa-heart';
-                span.textContent = 'Убрать';
+                span.textContent = 'В желаемом';
             }
             updateWishlistCounter();
         }

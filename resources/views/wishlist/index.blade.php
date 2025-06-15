@@ -13,7 +13,7 @@
     @if($wishlistItems->isEmpty())
         <div class="wishlist-empty">
             <p class="wishlist-empty-message">Ваш список желаемого пуст</p>
-            <a href="{{ route('games.index') }}" class="btn-continue-shopping">Перейти к играм</a>
+            <a href="{{ route('home') }}" class="btn-continue-shopping">Перейти к играм</a>
         </div>
     @else
         <div class="wishlist-grid">
@@ -162,7 +162,7 @@ function removeFromWishlist(button) {
                     </div>
                     <div class="wishlist-empty">
                         <p class="wishlist-empty-message">Ваш список желаемого пуст</p>
-                        <a href="{{ route('games.index') }}" class="btn-continue-shopping">Перейти к играм</a>
+                        <a href="{{ route('home') }}" class="btn-continue-shopping">Перейти к играм</a>
                     </div>
                 `;
             }

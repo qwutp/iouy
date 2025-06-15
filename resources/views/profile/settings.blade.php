@@ -4,7 +4,7 @@
     <div class="settings-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
             <h1 style="font-size: 1.5rem; margin: 0;">Настройки профиля</h1>
-            <a href="{{ route('profile.show') }}" class="item-btn item-btn-secondary">← Назад</a>
+            <a href="{{ route('profile.show') }}" class="btn-back">Назад</a>
         </div>
         
         <div class="settings-card">
