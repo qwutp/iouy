@@ -2,70 +2,64 @@
 
 @section('content')
 <style>
+    .search-page {
+        min-height: 80vh;
+        background-color: #f8f8f8;
+        padding: 2rem 0;
+    }
+    
     .search-container {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 2rem 1rem;
+        padding: 0 1rem;
     }
     
-    .search-header {
+    .search-results-header {
         margin-bottom: 2rem;
+        text-align: center;
     }
     
     .search-title {
         font-size: 2rem;
         font-weight: 700;
+        color: #333;
         margin-bottom: 0.5rem;
     }
     
     .search-count {
+        font-size: 1.125rem;
         color: #666;
+        font-weight: 500;
     }
     
-    .search-form {
-        margin-bottom: 2rem;
-        display: flex;
-        gap: 0.5rem;
-    }
-    
-    .search-input {
-        flex: 1;
-        padding: 0.75rem 1rem;
-        border: 1px solid #ddd;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-    }
-    
-    .search-input:focus {
-        outline: none;
-        border-color: #393A43;
-    }
-    
-    .search-button {
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
+    .search-query {
+        color: #393A43;
         font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .search-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
     }
     
     .search-empty {
         text-align: center;
-        padding: 3rem 0;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
     }
     
     .search-empty-message {
         font-size: 1.25rem;
         color: #666;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .search-empty-suggestion {
+        color: #888;
+        font-size: 1rem;
     }
     
     .search-grid {
@@ -74,32 +68,32 @@
         gap: 1.5rem;
     }
     
-    .search-item {
+    .game-card {
         background-color: #f8f8f8;
         border-radius: 0.5rem;
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
-    .search-item:hover {
+    .game-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
     
-    .search-item-image {
+    .game-image {
         position: relative;
         height: 150px;
         overflow: hidden;
         background-color: #e0e0e0;
     }
     
-    .search-item-image img {
+    .game-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
     
-    .search-item-discount {
+    .game-discount {
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
@@ -111,34 +105,72 @@
         font-size: 0.875rem;
     }
     
-    .search-item-content {
+    .placeholder-img {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e0e0e0;
+        color: #666;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    
+    .game-content {
         padding: 1rem;
     }
     
-    .search-item-title {
+    .game-title {
         font-size: 1.125rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
         line-height: 1.3;
     }
     
-    .search-item-title a {
+    .game-title a {
         color: #333;
         text-decoration: none;
     }
     
-    .search-item-title a:hover {
+    .game-title a:hover {
         color: #393A43;
     }
     
-    .search-item-genres {
+    .game-rating {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        gap: 0.5rem;
+    }
+    
+    .rating-stars {
+        display: flex;
+        gap: 0.125rem;
+    }
+    
+    .rating-star {
+        color: #ffd700;
+        font-size: 0.875rem;
+    }
+    
+    .rating-star.empty {
+        color: #ddd;
+    }
+    
+    .rating-text {
+        font-size: 0.875rem;
+        color: #666;
+    }
+    
+    .game-genres {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
         margin-bottom: 0.75rem;
     }
     
-    .search-item-genre {
+    .game-genre {
         background-color: #e0e0e0;
         padding: 0.125rem 0.5rem;
         border-radius: 1rem;
@@ -146,31 +178,31 @@
         color: #666;
     }
     
-    .search-item-price {
+    .game-price {
         display: flex;
         align-items: center;
         margin-bottom: 1rem;
+        gap: 0.5rem;
     }
     
-    .search-item-current-price {
+    .current-price {
         font-size: 1.125rem;
         font-weight: 600;
         color: #393A43;
     }
     
-    .search-item-old-price {
+    .old-price {
         font-size: 0.875rem;
         text-decoration: line-through;
         color: #888;
-        margin-right: 0.5rem;
     }
     
-    .search-item-actions {
+    .game-actions {
         display: flex;
         gap: 0.5rem;
     }
     
-    .btn-add-to-cart {
+    .btn-cart {
         flex: 1;
         background: linear-gradient(135deg, #393A43, #2c2d35);
         color: white;
@@ -180,15 +212,33 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
+        text-decoration: none;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
-    .btn-add-to-cart:hover {
+    .btn-cart:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
     }
     
-    .btn-add-to-wishlist {
+    .btn-cart:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .btn-cart.in-cart {
+        background: #dc3545;
+    }
+    
+    .btn-cart.in-cart:hover {
+        background: #c82333;
+    }
+    
+    .btn-wishlist {
         background: white;
         border: 1px solid #393A43;
         color: #393A43;
@@ -199,114 +249,295 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 1rem;
     }
     
-    .btn-add-to-wishlist:hover {
+    .btn-wishlist:hover {
         background: #393A43;
         color: white;
     }
     
-    .btn-add-to-wishlist.in-wishlist {
+    .btn-wishlist.in-wishlist {
         background: #dc3545;
         border-color: #dc3545;
         color: white;
     }
     
-    .placeholder-img {
-        width: 100%;
-        height: 100%;
+    .pagination-wrapper {
+        margin-top: 3rem;
         display: flex;
-        align-items: center;
         justify-content: center;
-        background-color: #e0e0e0;
+    }
+    
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+    
+    .pagination a,
+    .pagination span {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ddd;
         color: #666;
-        font-size: 24px;
+        text-decoration: none;
+        border-radius: 0.25rem;
+        transition: all 0.3s ease;
+    }
+    
+    .pagination a:hover {
+        background: #393A43;
+        color: white;
+        border-color: #393A43;
+    }
+    
+    .pagination .active span {
+        background: #393A43;
+        color: white;
+        border-color: #393A43;
+    }
+    
+    /* Toast notification styles */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 0;
+        transform: translateX(400px);
+        transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    
+    .toast.error {
+        background: #dc3545;
+    }
+    
+    @media (max-width: 768px) {
+        .search-title {
+            font-size: 1.5rem;
+        }
+        
+        .search-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .search-container {
+            padding: 0 0.5rem;
+        }
+        
+        .toast {
+            right: 10px;
+            left: 10px;
+            transform: translateY(-100px);
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+        }
     }
 </style>
 
-<div class="search-container">
-    <div class="search-header">
-        <h1 class="search-title">Результаты поиска</h1>
-        <p class="search-count">Найдено: {{ $games->count() }} игр</p>
-    </div>
-    
-    <form action="{{ route('games.search') }}" method="GET" class="search-form">
-        <input type="text" name="query" class="search-input" placeholder="Поиск игр..." value="{{ request('query') }}">
-        <button type="submit" class="search-button">Поиск</button>
-    </form>
-    
-    @if($games->isEmpty())
-        <div class="search-empty">
-            <p class="search-empty-message">По вашему запросу ничего не найдено</p>
-            <a href="{{ route('games.index') }}" class="search-button">Перейти к играм</a>
-        </div>
-    @else
-        <div class="search-grid">
-            @foreach($games as $game)
-                <div class="search-item">
-                    <div class="search-item-image">
-                        @php
-                            $imagePath = null;
-                            if ($game->primaryImage) {
-                                $imagePath = $game->primaryImage->image_path;
-                            }
-                        @endphp
-                        
-                        @if($imagePath)
-                            <img src="{{ asset('images/games/' . $imagePath) }}" alt="{{ $game->title }}" onerror="this.parentElement.innerHTML='<div class=\'placeholder-img\'>{{ substr($game->title, 0, 1) }}</div>'">
-                        @else
-                            <div class="placeholder-img">{{ substr($game->title, 0, 1) }}</div>
-                        @endif
-                        
-                        @if($game->isOnDiscount())
-                            <div class="search-item-discount">-{{ $game->getDiscountPercentage() }}%</div>
-                        @endif
-                    </div>
-                    <div class="search-item-content">
-                        <h3 class="search-item-title">
-                            <a href="{{ route('games.show', $game) }}">{{ $game->title }}</a>
-                        </h3>
-                        <div class="search-item-genres">
-                            @foreach($game->genres->take(2) as $genre)
-                                <span class="search-item-genre">{{ $genre->name }}</span>
-                            @endforeach
-                        </div>
-                        <div class="search-item-price">
-                            @if($game->isOnDiscount())
-                                <span class="search-item-old-price">{{ number_format($game->price, 0, ',', ' ') }} ₽</span>
-                                <span class="search-item-current-price">{{ number_format($game->discount_price, 0, ',', ' ') }} ₽</span>
+<div class="search-page">
+    <div class="search-container">
+        @if(!empty($query))
+            <div class="search-results-header">
+                <h1 class="search-title">Результаты поиска</h1>
+                <p class="search-count">
+                    @if($games->count() > 0)
+                        Найдено <strong>{{ $games->total() }}</strong> {{ $games->total() == 1 ? 'игра' : ($games->total() < 5 ? 'игры' : 'игр') }} 
+                        по запросу "<span class="search-query">{{ $query }}</span>"
+                    @else
+                        По запросу "<span class="search-query">{{ $query }}</span>" ничего не найдено
+                    @endif
+                </p>
+            </div>
+        @endif
+        
+        @if(empty($query))
+            <div class="search-empty">
+                <div class="search-empty-icon">🎮</div>
+                <p class="search-empty-message">Используйте поиск для поиска игр</p>
+                <p class="search-empty-suggestion">Введите название игры в строку поиска выше</p>
+            </div>
+        @elseif($games->count() == 0)
+            <div class="search-empty">
+                <div class="search-empty-icon">😔</div>
+                <p class="search-empty-message">По вашему запросу ничего не найдено</p>
+                <p class="search-empty-suggestion">Попробуйте изменить поисковый запрос или проверьте правильность написания</p>
+            </div>
+        @else
+            <div class="search-grid">
+                @foreach($games as $game)
+                    <div class="game-card">
+                        <div class="game-image">
+                            @php
+                                $imagePath = null;
+                                if ($game->primaryImage) {
+                                    $imagePath = $game->primaryImage->image_path;
+                                }
+                            @endphp
+                            
+                            @if($imagePath && file_exists(public_path('images/games/' . $imagePath)))
+                                <img src="{{ asset('images/games/' . $imagePath) }}" alt="{{ $game->title }}">
                             @else
-                                <span class="search-item-current-price">{{ number_format($game->price, 0, ',', ' ') }} ₽</span>
+                                <div class="placeholder-img">{{ substr($game->title, 0, 1) }}</div>
+                            @endif
+                            
+                            @if($game->isOnDiscount())
+                                <div class="game-discount">-{{ $game->getDiscountPercentage() }}%</div>
                             @endif
                         </div>
-                        <div class="search-item-actions">
-                            @auth
-                                <form action="{{ route('cart.add', $game) }}" method="POST" style="flex: 1;">
-                                    @csrf
-                                    <button type="submit" class="btn-add-to-cart">В корзину</button>
-                                </form>
-                                <button 
-                                    class="btn-add-to-wishlist {{ in_array($game->id, $userWishlistItems ?? []) ? 'in-wishlist' : '' }}" 
-                                    onclick="toggleWishlist(this, {{ $game->id }})"
-                                    title="{{ in_array($game->id, $userWishlistItems ?? []) ? 'Удалить из списка желаемого' : 'Добавить в список желаемого' }}"
-                                >
-                                    <i class="fa{{ in_array($game->id, $userWishlistItems ?? []) ? 's' : 'r' }} fa-heart"></i>
-                                </button>
-                            @else
-                                <a href="{{ route('login') }}" class="btn-add-to-cart" style="flex: 1;">Войти</a>
-                            @endauth
+                        
+                        <div class="game-content">
+                            <h3 class="game-title">
+                                <a href="{{ route('games.show', $game) }}">{{ $game->title }}</a>
+                            </h3>
+                            
+                            @if($game->reviews_count > 0)
+                                <div class="game-rating">
+                                    <div class="rating-stars">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <span class="rating-star {{ $i <= round($game->average_rating) ? '' : 'empty' }}">★</span>
+                                        @endfor
+                                    </div>
+                                    <span class="rating-text">
+                                        {{ number_format($game->average_rating, 1) }} ({{ $game->reviews_count }})
+                                    </span>
+                                </div>
+                            @endif
+                            
+                            <div class="game-genres">
+                                @foreach($game->genres->take(2) as $genre)
+                                    <span class="game-genre">{{ $genre->name }}</span>
+                                @endforeach
+                            </div>
+                            
+                            <div class="game-price">
+                                @if($game->isOnDiscount())
+                                    <span class="old-price">{{ number_format($game->price, 0, ',', ' ') }} ₽</span>
+                                    <span class="current-price">{{ number_format($game->discount_price, 0, ',', ' ') }} ₽</span>
+                                @else
+                                    <span class="current-price">{{ number_format($game->price, 0, ',', ' ') }} ₽</span>
+                                @endif
+                            </div>
+                            
+                            <div class="game-actions">
+                                @auth
+                                    <button 
+                                        class="btn-cart {{ in_array($game->id, $userCartItems ?? []) ? 'in-cart' : '' }}" 
+                                        onclick="handleCart({{ $game->id }}, this)"
+                                    >
+                                        {{ in_array($game->id, $userCartItems ?? []) ? 'Убрать' : 'В корзину' }}
+                                    </button>
+                                    <button 
+                                        class="btn-wishlist {{ in_array($game->id, $userWishlistItems ?? []) ? 'in-wishlist' : '' }}" 
+                                        onclick="handleWishlist({{ $game->id }}, this)"
+                                    >
+                                        {{ in_array($game->id, $userWishlistItems ?? []) ? '❤️' : '🤍' }}
+                                    </button>
+                                @else
+                                    <a href="{{ route('login') }}" class="btn-cart">Войти</a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
+                @endforeach
+            </div>
+            
+            @if($games->hasPages())
+                <div class="pagination-wrapper">
+                    {{ $games->appends(['query' => $query])->links() }}
                 </div>
-            @endforeach
-        </div>
-    @endif
+            @endif
+        @endif
+    </div>
 </div>
 
+@auth
 <script>
-function toggleWishlist(button, gameId) {
+function showToast(message, isError = false) {
+    // Remove existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Create new toast
+    const toast = document.createElement('div');
+    toast.className = 'toast' + (isError ? ' error' : '');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Show toast
+    setTimeout(() => toast.classList.add('show'), 100);
+    
+    // Hide toast
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function handleCart(gameId, button) {
+    const isInCart = button.classList.contains('in-cart');
+    const originalText = button.textContent;
+    
+    button.disabled = true;
+    button.textContent = isInCart ? 'Убираем...' : 'Добавляем...';
+    
+    const url = isInCart ? `/cart/remove-by-game/${gameId}` : `/cart/add/${gameId}`;
+    const method = isInCart ? 'DELETE' : 'POST';
+    
+    fetch(url, {
+        method: method,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (isInCart) {
+                button.classList.remove('in-cart');
+                button.textContent = 'В корзину';
+                showToast('Игра удалена из корзины');
+            } else {
+                button.classList.add('in-cart');
+                button.textContent = 'Убрать';
+                showToast('Игра добавлена в корзину!');
+            }
+        } else {
+            showToast(data.message || 'Произошла ошибка', true);
+            button.textContent = originalText;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Произошла ошибка', true);
+        button.textContent = originalText;
+    })
+    .finally(() => {
+        button.disabled = false;
+    });
+}
+
+function handleWishlist(gameId, button) {
     const isInWishlist = button.classList.contains('in-wishlist');
-    const icon = button.querySelector('i');
+    
+    button.disabled = true;
     
     const url = isInWishlist ? `/wishlist/remove-by-game/${gameId}` : `/wishlist/add/${gameId}`;
     const method = isInWishlist ? 'DELETE' : 'POST';
@@ -314,28 +545,35 @@ function toggleWishlist(button, gameId) {
     fetch(url, {
         method: method,
         headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        credentials: 'same-origin'
+            'Accept': 'application/json'
+        }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             if (isInWishlist) {
                 button.classList.remove('in-wishlist');
-                icon.className = 'far fa-heart';
-                button.title = 'Добавить в список желаемого';
+                button.textContent = '🤍';
+                showToast('Игра удалена из списка желаемого');
             } else {
                 button.classList.add('in-wishlist');
-                icon.className = 'fas fa-heart';
-                button.title = 'Удалить из списка желаемого';
+                button.textContent = '❤️';
+                showToast('Игра добавлена в список желаемого!');
             }
+        } else {
+            showToast(data.message || 'Произошла ошибка', true);
         }
     })
     .catch(error => {
         console.error('Error:', error);
+        showToast('Произошла ошибка', true);
+    })
+    .finally(() => {
+        button.disabled = false;
     });
 }
 </script>
+@endauth
 @endsection

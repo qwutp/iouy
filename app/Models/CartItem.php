@@ -17,7 +17,6 @@ class CartItem extends Model
     protected $fillable = [
         'user_id',
         'game_id',
-        'quantity',
     ];
 
     /**

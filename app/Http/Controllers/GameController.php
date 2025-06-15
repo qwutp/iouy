@@ -89,25 +89,32 @@ class GameController extends Controller
      */
     public function search(Request $request)
     {
-        $query = $request->input('query');
+        $query = $request->input('query', '');
         
-        if (empty($query)) {
-            return redirect()->route('games.index');
+        $games = collect();
+        
+        if (!empty($query)) {
+            $games = Game::where('title', 'like', "%{$query}%")
+                ->orWhere('description', 'like', "%{$query}%")
+                ->with(['primaryImage', 'genres', 'reviews'])
+                ->paginate(12);
+            
+            // Add ratings to games
+            foreach ($games as $game) {
+                $game->average_rating = $game->getAverageRating();
+                $game->reviews_count = $game->getReviewsCount();
+            }
         }
         
-        $games = Game::where('title', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
-            ->with(['primaryImage', 'genres', 'reviews'])
-            ->paginate(15);
+        // Get user's wishlist and cart items
+        $userWishlistItems = [];
+        $userCartItems = [];
         
-        // Add ratings to games
-        foreach ($games as $game) {
-            $game->average_rating = $game->getAverageRating();
-            $game->reviews_count = $game->getReviewsCount();
+        if (auth()->check()) {
+            $userWishlistItems = auth()->user()->wishlistItems()->pluck('game_id')->toArray();
+            $userCartItems = auth()->user()->cartItems()->pluck('game_id')->toArray();
         }
         
-        $genres = Genre::all();
-        
-        return view('games.search', compact('games', 'query', 'genres'));
+        return view('games.search', compact('games', 'query', 'userWishlistItems', 'userCartItems'));
     }
 }
