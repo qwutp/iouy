@@ -1886,8 +1886,7 @@ img {
     }
     
     .cart-items {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        display: inline-flex;
         gap: 1.5rem;
     }
     
@@ -2137,28 +2136,12 @@ img {
         gap: 0.25rem;
         margin-bottom: 0.75rem;
     }
-    
-    .rating-stars {
-        display: flex;
-        gap: 0.125rem;
-    }
-    
-    .rating-star {
-        color: #ddd;
-        font-size: 0.875rem;
-    }
-    
-    .rating-star.active {
-        color: #ffc107;
-    }
-    
+
     .rating-text {
         font-size: 0.875rem;
         color: #666;
         margin-left: 0.25rem;
     }
-
-    /* Toast notifications */
     .toast {
         position: fixed;
         top: 20px;
@@ -2525,19 +2508,6 @@ img {
         gap: 0.5rem;
     }
     
-    .rating-stars {
-        display: flex;
-        gap: 0.125rem;
-    }
-    
-    .rating-star {
-        color: #ffd700;
-        font-size: 0.875rem;
-    }
-    
-    .rating-star.empty {
-        color: #ddd;
-    }
     
     .rating-text {
         font-size: 0.875rem;

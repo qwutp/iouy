@@ -126,7 +126,6 @@
                 <li class="category-item" data-filter="featured">Популярные</li>
                 <li class="category-item" data-filter="new">Новинки</li>
                 <li class="category-item" data-filter="sale">Скидки</li>
-                <li class="category-item" data-filter="top-rated">Высокий рейтинг</li>
             </ul>
         </div>
     </aside>
@@ -149,10 +148,6 @@
                     background: {{ $banner->background_color ?? 'linear-gradient(135deg, #393A43 0%, #2c2d35 100%)' }};
                 @endif
             ">
-                <div class="banner-content">
-                    <h2>{{ $banner->title ?? 'Лучшие игры здесь' }}</h2>
-                    <p>{{ $banner->subtitle ?? 'Найдите свою следующую любимую игру' }}</p>
-                </div>
                 @auth
                     @if(auth()->user()->is_admin)
                         <a href="{{ route('admin.banner.edit') }}" class="banner-edit-btn">Изменить баннер</a>
@@ -219,17 +214,17 @@
                                     $inWishlist = in_array($game->id, $userWishlistItems ?? []);
                                 @endphp
                                 <button type="button" 
-                                        class="game-card-cart-btn {{ $inCart ? 'in-cart' : '' }}" 
+                                        class="btn-add-to-wishlist {{ $inCart ? 'in-cart' : '' }}" 
                                         data-game-id="{{ $game->id }}"
                                         onclick="toggleCart(this)">
-                                    <span class="cart-text">{{ $inCart ? 'В корзине' : 'В корзину' }}</span>
+                                    <span class="cart-text" style="font-size: 10px">{{ $inCart ? 'В корзине' : 'В корзину' }}</span>
                                 </button>
                                 <button type="button" 
-                                        class="game-card-wishlist-btn {{ $inWishlist ? 'in-wishlist' : '' }}" 
+                                        class="btn-add-to-wishlist {{ $inWishlist ? 'in-wishlist' : '' }}" 
                                         data-game-id="{{ $game->id }}"
                                         onclick="toggleWishlist(this)"
                                         title="{{ $inWishlist ? 'Убрать из желаемого' : 'Добавить в желаемое' }}">
-                                    <i class="{{ $inWishlist ? 'fas' : 'far' }} fa-heart"></i>
+                                    <span class="cart-text" style="font-size: 10px">{{ $inCart ? 'В желаемом' : 'В желаемое' }}</span>
                                 </button>
                             @else
                                 <a href="{{ route('login') }}" class="game-card-cart-btn">Войти</a>
@@ -247,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryItems = document.querySelectorAll('.category-item');
     const gameCards = document.querySelectorAll('.game-card');
     
-    // Show all games initially
     gameCards.forEach(card => {
         card.style.display = 'block';
     });
@@ -276,14 +270,11 @@ function toggleCart(button) {
     const isInCart = button.classList.contains('in-cart');
     const cartText = button.querySelector('.cart-text');
     
-    // Определяем URL и метод в зависимости от текущего состояния
     const url = isInCart ? `/cart/remove-by-game/${gameId}` : `/cart/add/${gameId}`;
     const method = isInCart ? 'DELETE' : 'POST';
     
-    // Получаем CSRF-токен из мета-тега
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    // Отправляем запрос
     fetch(url, {
         method: method,
         headers: {
@@ -301,7 +292,6 @@ function toggleCart(button) {
     })
     .then(data => {
         if (data.success) {
-            // Меняем внешний вид кнопки
             if (isInCart) {
                 button.classList.remove('in-cart');
                 cartText.textContent = 'В корзину';
@@ -322,14 +312,11 @@ function toggleWishlist(button) {
     const isInWishlist = button.classList.contains('in-wishlist');
     const icon = button.querySelector('i');
     
-    // Определяем URL и метод в зависимости от текущего состояния
     const url = isInWishlist ? `/wishlist/remove-by-game/${gameId}` : `/wishlist/add/${gameId}`;
     const method = isInWishlist ? 'DELETE' : 'POST';
     
-    // Получаем CSRF-токен из мета-тега
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    // Отправляем запрос
     fetch(url, {
         method: method,
         headers: {
@@ -347,7 +334,6 @@ function toggleWishlist(button) {
     })
     .then(data => {
         if (data.success) {
-            // Меняем внешний вид кнопки
             if (isInWishlist) {
                 button.classList.remove('in-wishlist');
                 icon.className = 'far fa-heart';

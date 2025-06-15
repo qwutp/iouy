@@ -108,7 +108,6 @@
         </div>
     </div>
 
-    <!-- Modal for editing reviews -->
     <div id="edit-review-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px;">
             <h3 style="margin-bottom: 15px;">Редактировать отзыв</h3>
@@ -132,7 +131,7 @@
                 </div>
                 <div style="display: flex; justify-content: flex-end; gap: 10px;">
                     <button type="button" onclick="closeEditModal()" style="padding: 8px 16px; background-color: #e0e0e0; border: none; border-radius: 4px; cursor: pointer;">Отмена</button>
-                    <button type="submit" style="padding: 8px 16px; background-color: #393A43; color: white; border: none; border-radius: 4px; cursor: pointer;">Сохранить</button>
+                    <button type="submit" style="padding: 8px 16px; background-color: #9193A6; color: white; border: none; border-radius: 4px; cursor: pointer;">Сохранить</button>
                 </div>
             </form>
         </div>
@@ -143,7 +142,6 @@
             document.getElementById('edit-content').value = content;
             document.getElementById('edit-rating-input').value = rating;
             
-            // Update stars
             const stars = document.querySelectorAll('#edit-rating .rating-star');
             stars.forEach(star => {
                 const value = parseInt(star.getAttribute('data-value'));
@@ -168,10 +166,8 @@
                 });
             });
             
-            // Set form action
             document.getElementById('edit-review-form').action = `/reviews/${id}`;
             
-            // Show modal
             document.getElementById('edit-review-modal').style.display = 'block';
         }
         
