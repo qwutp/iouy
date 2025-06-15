@@ -3,7 +3,17 @@
 @section('content')
     <div class="admin-form">
         <h1 class="admin-form-title">Редактирование игры</h1>
-        <div class="admin-content">
+        
+        @if ($errors->any())
+        <div class="alert alert-error">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        
         <form action="{{ route('admin.games.update', $game) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -56,66 +66,105 @@
                 @enderror
             </div>
             
-            <div class="admin-form-section">
+            <div class="admin-form-group">
                 <label>Жанры</label>
-                <div class="admin-form-toggles">
-                        @foreach($genres as $genre)
-                            <div class="admin-form-toggle">
-                                <input type="checkbox" id="genre-{{ $genre->id }}" name="genres[]" value="{{ $genre->id }}" 
-                                       @if(in_array($genre->id, old('genres', []))) checked @endif>
-                                <label for="genre-{{ $genre->id }}">{{ $genre->name }}</label>
-                            </div>
-                        @endforeach
-                    </div>
+                <div class="admin-form-checkboxes">
+                    @foreach($genres as $genre)
+                        <div class="admin-form-checkbox">
+                            <input type="checkbox" 
+                                   id="genre-{{ $genre->id }}" 
+                                   name="genres[]" 
+                                   value="{{ $genre->id }}" 
+                                   {{ in_array($genre->id, old('genres', $game->genres->pluck('id')->toArray())) ? 'checked' : '' }}>
+                            <label for="genre-{{ $genre->id }}">{{ $genre->name }}</label>
+                        </div>
+                    @endforeach
+                </div>
                 @error('genres')
                     <div class="admin-form-error">{{ $message }}</div>
                 @enderror
             </div>
             
-            <div class="admin-form-section">
-                <h2 class="admin-form-section-title">Изображения</h2>
-                
-                <div class="admin-form-group">
-                    <label for="images">Изображения игры</label>
-                    <input type="file" id="images" name="images[]" multiple required accept="image/*" class="admin-file-input">
-                    <p class="admin-form-help">Выберите несколько изображений для игры (скриншоты, обложка и т.д.)</p>
-                </div>
-                
-                <div class="admin-form-group">
-                    <label for="primary_image">Основное изображение</label>
-                    <input type="number" id="primary_image" name="primary_image" value="{{ old('primary_image', 0) }}" min="0" required>
-                    <p class="admin-form-help">Укажите номер изображения, которое будет основным (0 - первое, 1 - второе и т.д.)</p>
+            <div class="admin-form-group">
+                <label>Текущие изображения ({{ $game->images->count() }}/6)</label>
+                <div class="admin-form-images">
+                    @foreach($game->images as $image)
+                        <div class="admin-form-image">
+                            <img src="{{ asset('images/games/' . $image->image_path) }}" alt="Изображение {{ $loop->index + 1 }}">
+                            <div class="admin-form-image-actions">
+                                <div class="admin-form-checkbox">
+                                    <input type="radio" id="primary-{{ $image->id }}" name="primary_image" value="{{ $image->id }}" {{ $image->is_primary ? 'checked' : '' }}>
+                                    <label for="primary-{{ $image->id }}">Основное</label>
+                                </div>
+                                <div class="admin-form-checkbox">
+                                    <input type="checkbox" id="delete-{{ $image->id }}" name="delete_images[]" value="{{ $image->id }}">
+                                    <label for="delete-{{ $image->id }}">Удалить</label>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
             
-                <h2 class="admin-form-section-title">Дополнительные настройки</h2>
+            <div class="admin-form-group">
+                <label>Добавить новые изображения</label>
+                <input type="file" name="new_images[]" multiple accept="image/*">
+                <p class="admin-form-help">Максимум 6 изображений всего. Сейчас у игры {{ $game->images->count() }} изображений.</p>
+                @error('new_images')
+                    <div class="admin-form-error">{{ $message }}</div>
+                @enderror
+            </div>
             
-            <div class="admin-form-checkboxes">
-                <div class="admin-form-toggle">
+            <div class="admin-form-group">
+                <div class="admin-form-checkbox">
                     <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $game->is_featured) ? 'checked' : '' }}>
                     <label for="is_featured">Популярная игра</label>
                 </div>
+            </div>
             
-            
- 
-                <div class="admin-form-toggle">
+            <div class="admin-form-group">
+                <div class="admin-form-checkbox">
                     <input type="checkbox" id="is_new" name="is_new" value="1" {{ old('is_new', $game->is_new) ? 'checked' : '' }}>
                     <label for="is_new">Новинка</label>
                 </div>
-
+            </div>
             
-
-                <div class="admin-form-toggle">
+            <div class="admin-form-group">
+                <div class="admin-form-checkbox">
                     <input type="checkbox" id="is_on_sale" name="is_on_sale" value="1" {{ old('is_on_sale', $game->is_on_sale) ? 'checked' : '' }}>
                     <label for="is_on_sale">Распродажа</label>
                 </div>
-
             </div>
+            
             <div class="admin-form-actions">
                 <button type="submit" class="admin-form-submit">Сохранить изменения</button>
                 <a href="{{ route('admin.games') }}" class="admin-form-cancel">Отмена</a>
             </div>
         </form>
-</div>
     </div>
+
+<style>
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.admin-form-help {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+</style>
 @endsection

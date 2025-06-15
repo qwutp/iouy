@@ -16,7 +16,7 @@ class GameController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Game::with(['primaryImage', 'genres']);
+        $query = Game::with(['primaryImage', 'genres', 'reviews']);
         
         // Apply filters
         if ($request->has('genre')) {
@@ -52,6 +52,12 @@ class GameController extends Controller
         $games = $query->paginate(15);
         $genres = Genre::all();
         
+        // Add ratings to games
+        foreach ($games as $game) {
+            $game->average_rating = $game->getAverageRating();
+            $game->reviews_count = $game->getReviewsCount();
+        }
+        
         return view('games.index', compact('games', 'genres'));
     }
     
@@ -65,7 +71,14 @@ class GameController extends Controller
     {
         $game->load(['images', 'genres', 'reviews.user', 'reviews.likes']);
         
-        return view('games.show', compact('game'));
+        // Add ratings to game
+        $game->average_rating = $game->getAverageRating();
+        $game->reviews_count = $game->getReviewsCount();
+        
+        // Get the reviews for the game
+        $reviews = $game->reviews()->with('user', 'likes')->get();
+        
+        return view('games.show', compact('game', 'reviews'));
     }
     
     /**
@@ -78,11 +91,23 @@ class GameController extends Controller
     {
         $query = $request->input('query');
         
+        if (empty($query)) {
+            return redirect()->route('games.index');
+        }
+        
         $games = Game::where('title', 'like', "%{$query}%")
             ->orWhere('description', 'like', "%{$query}%")
-            ->with(['primaryImage', 'genres'])
+            ->with(['primaryImage', 'genres', 'reviews'])
             ->paginate(15);
-            
-        return view('games.search', compact('games', 'query'));
+        
+        // Add ratings to games
+        foreach ($games as $game) {
+            $game->average_rating = $game->getAverageRating();
+            $game->reviews_count = $game->getReviewsCount();
+        }
+        
+        $genres = Genre::all();
+        
+        return view('games.search', compact('games', 'query', 'genres'));
     }
 }

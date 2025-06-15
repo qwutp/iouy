@@ -71,9 +71,9 @@
                 <p class="admin-form-help">Выберите один или несколько жанров для игры</p>
                 
                 @if(isset($genres) && $genres->count() > 0)
-                    <div class="admin-form-toggles">
+                    <div class="admin-form-genres">
                         @foreach($genres as $genre)
-                            <div class="admin-form-toggle">
+                            <div class="admin-form-genre">
                                 <input type="checkbox" id="genre-{{ $genre->id }}" name="genres[]" value="{{ $genre->id }}" 
                                        @if(in_array($genre->id, old('genres', []))) checked @endif>
                                 <label for="genre-{{ $genre->id }}">{{ $genre->name }}</label>
@@ -94,7 +94,7 @@
                 <div class="admin-form-group">
                     <label for="images">Изображения игры</label>
                     <input type="file" id="images" name="images[]" multiple required accept="image/*" class="admin-file-input">
-                    <p class="admin-form-help">Выберите несколько изображений для игры (скриншоты, обложка и т.д.)</p>
+                    <p class="admin-form-help">Выберите от 1 до 6 изображений для игры (скриншоты, обложка и т.д.). <strong>Максимум: 6 изображений</strong></p>
                 </div>
                 
                 <div class="admin-form-group">
@@ -107,25 +107,28 @@
             <div class="admin-form-section">
                 <h2 class="admin-form-section-title">Дополнительные настройки</h2>
                 
-                <div class="admin-form-checkboxes">
-                    <div class="admin-form-toggle">
+                <div class="admin-form-options">
+                    <div class="admin-form-option">
                         <input type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured') ? 'checked' : '' }}>
                         <div class="admin-form-option-content">
                             <label for="is_featured">Популярная игра</label>
+                            <p>Игра будет отображаться в разделе популярных игр</p>
                         </div>
                     </div>
                     
-                    <div class="admin-form-toggle">
+                    <div class="admin-form-option">
                         <input type="checkbox" id="is_new" name="is_new" value="1" {{ old('is_new') ? 'checked' : '' }}>
                         <div class="admin-form-option-content">
                             <label for="is_new">Новинка</label>
+                            <p>Игра будет отмечена как новинка</p>
                         </div>
                     </div>
                     
-                    <div class="admin-form-toggle">
+                    <div class="admin-form-option">
                         <input type="checkbox" id="is_on_sale" name="is_on_sale" value="1" {{ old('is_on_sale') ? 'checked' : '' }}>
                         <div class="admin-form-option-content">
                             <label for="is_on_sale">Распродажа</label>
+                            <p>Игра будет отображаться в разделе распродаж</p>
                         </div>
                     </div>
                 </div>
@@ -203,7 +206,7 @@
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
-    background-color:rgb(187, 187, 187);
+    background-color: #f5f5f5;
     border-radius: 8px;
     transition: all 0.3s ease;
     border: 2px solid transparent;

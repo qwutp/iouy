@@ -12,17 +12,26 @@ class Review extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'user_id',
         'game_id',
-        'content',
         'rating',
+        'content',
     ];
 
     /**
-     * Get the user that owns the review.
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'likes_count',
+    ];
+
+    /**
+     * Get the user that wrote the review.
      */
     public function user()
     {
@@ -30,7 +39,7 @@ class Review extends Model
     }
 
     /**
-     * Get the game that owns the review.
+     * Get the game that the review is for.
      */
     public function game()
     {
@@ -46,9 +55,19 @@ class Review extends Model
     }
 
     /**
-     * Check if the review is liked by a user.
+     * Get the likes count for the review.
      *
-     * @param  int  $userId
+     * @return int
+     */
+    public function getLikesCountAttribute()
+    {
+        return $this->likes()->count();
+    }
+
+    /**
+     * Check if the review is liked by a specific user.
+     *
+     * @param int $userId
      * @return bool
      */
     public function isLikedByUser($userId)

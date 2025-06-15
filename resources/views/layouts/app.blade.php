@@ -59,7 +59,7 @@
             </div>
         </header>
         
-        @if(!request()->routeIs(['login', 'register', 'password.*', 'profile.*', 'cart.*', 'wishlist.*', 'admin.*']))
+        @if(!request()->routeIs(['login', 'register', 'password.*', 'profile.*', 'cart.*', 'wishlist.*', 'admin.*', 'games.show']))
             @if(request()->routeIs('home'))
                 <main class="main-content">
                     @yield('content')

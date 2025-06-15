@@ -12,11 +12,12 @@ class CartItem extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'user_id',
         'game_id',
+        'quantity',
     ];
 
     /**
@@ -28,7 +29,7 @@ class CartItem extends Model
     }
 
     /**
-     * Get the game that owns the cart item.
+     * Get the game that belongs to the cart item.
      */
     public function game()
     {

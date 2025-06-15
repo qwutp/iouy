@@ -12,7 +12,7 @@ class WishlistItem extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
         'user_id',
@@ -28,7 +28,7 @@ class WishlistItem extends Model
     }
 
     /**
-     * Get the game that owns the wishlist item.
+     * Get the game that belongs to the wishlist item.
      */
     public function game()
     {

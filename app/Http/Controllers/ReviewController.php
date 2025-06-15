@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
-use App\Models\ReviewLike;
 use App\Models\Game;
+use App\Models\ReviewLike;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -29,29 +29,27 @@ class ReviewController extends Controller
     public function store(Request $request, Game $game)
     {
         $request->validate([
-            'content' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
+            'content' => 'required|string|max:1000',
         ]);
         
-        $user = auth()->user();
-        
-        // Check if the user has already reviewed this game
-        $existingReview = Review::where('user_id', $user->id)
+        // Check if user already has a review for this game
+        $existingReview = Review::where('user_id', auth()->id())
             ->where('game_id', $game->id)
             ->first();
             
         if ($existingReview) {
-            return back()->with('error', 'You have already reviewed this game.');
+            return back()->with('error', 'Вы уже оставили отзыв на эту игру. Вы можете отредактировать свой существующий отзыв.');
         }
         
         Review::create([
-            'user_id' => $user->id,
+            'user_id' => auth()->id(),
             'game_id' => $game->id,
-            'content' => $request->content,
             'rating' => $request->rating,
+            'content' => $request->content,
         ]);
         
-        return back()->with('success', 'Review submitted successfully.');
+        return back()->with('success', 'Отзыв успешно добавлен.');
     }
     
     /**
@@ -64,21 +62,21 @@ class ReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         // Check if the review belongs to the authenticated user
-        if ($review->user_id !== auth()->id()) {
+        if ($review->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403);
         }
         
         $request->validate([
-            'content' => 'required|string',
             'rating' => 'required|integer|min:1|max:5',
+            'content' => 'required|string|max:1000',
         ]);
         
         $review->update([
-            'content' => $request->content,
             'rating' => $request->rating,
+            'content' => $request->content,
         ]);
         
-        return back()->with('success', 'Review updated successfully.');
+        return back()->with('success', 'Отзыв успешно обновлен.');
     }
     
     /**
@@ -89,55 +87,57 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
-        // Check if the review belongs to the authenticated user or if the user is an admin
+        // Check if the review belongs to the authenticated user or user is admin
         if ($review->user_id !== auth()->id() && !auth()->user()->isAdmin()) {
             abort(403);
         }
         
         $review->delete();
         
-        return back()->with('success', 'Review deleted successfully.');
+        return back()->with('success', 'Отзыв успешно удален.');
     }
     
     /**
      * Like a review.
      *
      * @param  \App\Models\Review  $review
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function like(Review $review)
     {
-        $user = auth()->user();
-        
-        // Check if the user has already liked this review
-        $existingLike = ReviewLike::where('user_id', $user->id)
+        // Check if user already liked this review
+        $existingLike = ReviewLike::where('user_id', auth()->id())
             ->where('review_id', $review->id)
             ->first();
             
         if (!$existingLike) {
             ReviewLike::create([
-                'user_id' => $user->id,
+                'user_id' => auth()->id(),
                 'review_id' => $review->id,
             ]);
         }
         
-        return back();
+        return response()->json([
+            'success' => true,
+            'likes_count' => $review->likes()->count(),
+        ]);
     }
     
     /**
      * Unlike a review.
      *
      * @param  \App\Models\Review  $review
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function unlike(Review $review)
     {
-        $user = auth()->user();
-        
-        ReviewLike::where('user_id', $user->id)
+        ReviewLike::where('user_id', auth()->id())
             ->where('review_id', $review->id)
             ->delete();
             
-        return back();
+        return response()->json([
+            'success' => true,
+            'likes_count' => $review->likes()->count(),
+        ]);
     }
 }

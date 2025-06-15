@@ -42,7 +42,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
         'is_admin' => 'boolean',
     ];
 
@@ -57,7 +56,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's cart items.
+     * Get the cart items for the user.
      */
     public function cartItems()
     {
@@ -65,7 +64,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's wishlist items.
+     * Get the wishlist items for the user.
      */
     public function wishlistItems()
     {
@@ -73,18 +72,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Get the user's purchases.
-     */
-    public function purchases()
-    {
-        return $this->hasMany(Purchase::class);
-    }
-
-    /**
-     * Get the user's reviews.
+     * Get the reviews for the user.
      */
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get the purchases for the user.
+     */
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class);
     }
 }

@@ -55,8 +55,6 @@
             </form>
             
             <div class="auth-links">
-                <a href="{{ route('password.request') }}">Забыли пароль?</a>
-                <span class="auth-links-divider">|</span>
                 <a href="{{ route('register') }}">Регистрация</a>
             </div>
         </div>

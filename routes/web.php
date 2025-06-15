@@ -35,11 +35,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{game}', [CartController::class, 'add'])->name('cart.add');
     Route::delete('/cart/remove/{cartItem}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart/remove-by-game/{gameId}', [CartController::class, 'removeByGame'])->name('cart.removeByGame');
     Route::get('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::get('/cart/count', [CartController::class, 'getCount'])->name('cart.count');
     
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/wishlist/add/{game}', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::delete('/wishlist/remove/{wishlistItem}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::delete('/wishlist/remove-by-game/{gameId}', [WishlistController::class, 'removeByGame'])->name('wishlist.removeByGame');
+    Route::get('/wishlist/count', [WishlistController::class, 'getCount'])->name('wishlist.count');
     
     Route::get('/purchases', [ProfileController::class, 'purchases'])->name('profile.purchases');
     

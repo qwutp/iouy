@@ -62,7 +62,7 @@ class AdminController extends Controller
             'is_on_sale' => 'boolean',
             'genres' => 'required|array|min:1',
             'genres.*' => 'exists:genres,id',
-            'images' => 'required|array|min:1',
+            'images' => 'required|array|min:1|max:6',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'primary_image' => 'required|integer|min:0',
         ]);
@@ -134,70 +134,92 @@ class AdminController extends Controller
             'is_on_sale' => 'boolean',
             'genres' => 'required|array',
             'genres.*' => 'exists:genres,id',
-            'primary_image' => 'nullable|integer|min:0',
-            'new_images' => 'nullable|array',
+            'primary_image' => 'nullable|exists:game_images,id',
+            'new_images' => 'nullable|array|max:6',
             'new_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'delete_images' => 'nullable|array',
+            'delete_images.*' => 'exists:game_images,id',
         ]);
         
-        $game->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-            'discount_price' => $request->discount_price,
-            'system_requirements' => $request->system_requirements,
-            'recommended_requirements' => $request->recommended_requirements,
-            'is_featured' => $request->has('is_featured'),
-            'is_new' => $request->has('is_new'),
-            'is_on_sale' => $request->has('is_on_sale'),
-        ]);
-        
-        $game->genres()->sync($request->genres);
-        
-        if ($request->has('primary_image')) {
-            GameImage::where('game_id', $game->id)->update(['is_primary' => false]);
+        try {
+            // Update game data
+            $game->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'price' => $request->price,
+                'discount_price' => $request->discount_price,
+                'system_requirements' => $request->system_requirements,
+                'recommended_requirements' => $request->recommended_requirements,
+                'is_featured' => $request->has('is_featured'),
+                'is_new' => $request->has('is_new'),
+                'is_on_sale' => $request->has('is_on_sale'),
+            ]);
             
-            GameImage::where('game_id', $game->id)
-                ->where('id', $request->primary_image)
-                ->update(['is_primary' => true]);
-        }
-        
-        // Создать директорию если не существует
-        $gamesDir = public_path('images/games');
-        if (!file_exists($gamesDir)) {
-            mkdir($gamesDir, 0755, true);
-        }
-        
-        if ($request->hasFile('new_images')) {
-            $lastOrder = GameImage::where('game_id', $game->id)->max('order') ?? -1;
+            // Sync genres
+            $game->genres()->sync($request->genres);
             
-            foreach ($request->file('new_images') as $index => $image) {
-                $fileName = time() . '_' . ($lastOrder + $index + 1) . '.' . $image->getClientOriginalExtension();
-                $image->move($gamesDir, $fileName);
-                
-                GameImage::create([
-                    'game_id' => $game->id,
-                    'image_path' => $fileName,
-                    'is_primary' => false,
-                    'order' => $lastOrder + $index + 1,
-                ]);
-            }
-        }
-        
-        if ($request->has('delete_images')) {
-            foreach ($request->delete_images as $imageId) {
-                $image = GameImage::find($imageId);
-                
-                if ($image && $image->game_id == $game->id) {
-                    $imagePath = public_path('images/games/' . $image->image_path);
-                    if (file_exists($imagePath)) {
-                        unlink($imagePath);
+            // Handle image deletion
+            if ($request->has('delete_images')) {
+                foreach ($request->delete_images as $imageId) {
+                    $image = GameImage::where('id', $imageId)->where('game_id', $game->id)->first();
+                    
+                    if ($image) {
+                        $imagePath = public_path('images/games/' . $image->image_path);
+                        if (file_exists($imagePath)) {
+                            unlink($imagePath);
+                        }
+                        $image->delete();
                     }
-                    $image->delete();
                 }
             }
+            
+            // Create directory if it doesn't exist
+            $gamesDir = public_path('images/games');
+            if (!file_exists($gamesDir)) {
+                mkdir($gamesDir, 0755, true);
+            }
+            
+            // Handle new images
+            if ($request->hasFile('new_images')) {
+                $currentImageCount = $game->images()->count();
+                $newImageCount = count($request->file('new_images'));
+                
+                // Check if total images would exceed 6
+                if ($currentImageCount + $newImageCount > 6) {
+                    return back()->withErrors(['new_images' => 'Максимальное количество изображений: 6. У игры уже ' . $currentImageCount . ' изображений.'])->withInput();
+                }
+                
+                $lastOrder = GameImage::where('game_id', $game->id)->max('order') ?? -1;
+                
+                foreach ($request->file('new_images') as $index => $image) {
+                    $fileName = time() . '_' . ($lastOrder + $index + 1) . '.' . $image->getClientOriginalExtension();
+                    $image->move($gamesDir, $fileName);
+                    
+                    GameImage::create([
+                        'game_id' => $game->id,
+                        'image_path' => $fileName,
+                        'is_primary' => false,
+                        'order' => $lastOrder + $index + 1,
+                    ]);
+                }
+            }
+            
+            // Handle primary image change
+            if ($request->has('primary_image') && $request->primary_image) {
+                // Reset all images to non-primary
+                GameImage::where('game_id', $game->id)->update(['is_primary' => false]);
+                
+                // Set the selected image as primary
+                GameImage::where('id', $request->primary_image)
+                    ->where('game_id', $game->id)
+                    ->update(['is_primary' => true]);
+            }
+            
+            return redirect()->route('admin.games')->with('success', 'Игра успешно обновлена!');
+            
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Ошибка при обновлении игры: ' . $e->getMessage()])->withInput();
         }
-        
-        return redirect()->route('admin.games')->with('success', 'Game updated successfully.');
     }
     
     public function destroyGame(Game $game)

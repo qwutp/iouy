@@ -3,35 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
-use App\Models\Banner;
 use Illuminate\Http\Request;
+use App\Models\Genre;
+use App\Models\Banner;
 
 class HomeController extends Controller
 {
-    /**
-     * Show the home page.
-     *
-     * @return \Illuminate\View\View
-     */
     public function index()
     {
-        $featuredGames = Game::where('is_featured', true)
-            ->with(['primaryImage', 'genres'])
-            ->take(5)
-            ->get();
-            
-        $newGames = Game::where('is_new', true)
-            ->with(['primaryImage', 'genres'])
-            ->take(5)
-            ->get();
-            
-        $saleGames = Game::where('is_on_sale', true)
-            ->with(['primaryImage', 'genres'])
-            ->take(5)
-            ->get();
-            
+        // Get all games
+        $allGames = Game::with(['genres', 'primaryImage', 'reviews'])->get();
+    
+        // Get all genres
+        $genres = Genre::all();
+    
+        // Get the banner
         $banner = Banner::first();
-        
-        return view('home', compact('featuredGames', 'newGames', 'saleGames', 'banner'));
+    
+        // Add ratings to games
+        foreach ($allGames as $game) {
+            $game->average_rating = $game->getAverageRating();
+            $game->reviews_count = $game->getReviewsCount();
+        }
+    
+        // Get user's cart and wishlist items if authenticated
+        $userCartItems = [];
+        $userWishlistItems = [];
+    
+        if (auth()->check()) {
+            $userCartItems = auth()->user()->cartItems()->pluck('game_id')->toArray();
+            $userWishlistItems = auth()->user()->wishlistItems()->pluck('game_id')->toArray();
+        }
+    
+        return view('home', compact('allGames', 'genres', 'banner', 'userCartItems', 'userWishlistItems'));
     }
 }
