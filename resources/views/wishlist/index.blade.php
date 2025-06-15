@@ -1,237 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    .wishlist-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-    }
-    
-    .wishlist-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-    
-    .wishlist-title {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0;
-    }
-    
-    .wishlist-empty {
-        text-align: center;
-        padding: 3rem 0;
-    }
-    
-    .wishlist-empty-message {
-        font-size: 1.25rem;
-        color: #666;
-        margin-bottom: 1.5rem;
-    }
-    
-    .btn-continue-shopping {
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-    }
-    
-    .btn-continue-shopping:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
-    }
-    
-    .wishlist-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1.5rem;
-    }
-    
-    .wishlist-item {
-        background-color: #f8f8f8;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .wishlist-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
-    
-    .wishlist-item-image {
-        position: relative;
-        height: 150px;
-        overflow: hidden;
-        background-color: #e0e0e0;
-    }
-    
-    .wishlist-item-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .wishlist-item-discount {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        background-color: #dc3545;
-        color: white;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-    
-    .wishlist-item-content {
-        padding: 1rem;
-    }
-    
-    .wishlist-item-title {
-        font-size: 1.125rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        line-height: 1.3;
-    }
-    
-    .wishlist-item-title a {
-        color: #333;
-        text-decoration: none;
-    }
-    
-    .wishlist-item-title a:hover {
-        color: #393A43;
-    }
-    
-    .wishlist-item-genres {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-    }
-    
-    .wishlist-item-genre {
-        background-color: #e0e0e0;
-        padding: 0.125rem 0.5rem;
-        border-radius: 1rem;
-        font-size: 0.75rem;
-        color: #666;
-    }
-    
-    .wishlist-item-price {
-        display: flex;
-        align-items: center;
-        margin-bottom: 1rem;
-    }
-    
-    .wishlist-item-current-price {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #393A43;
-    }
-    
-    .wishlist-item-old-price {
-        font-size: 0.875rem;
-        text-decoration: line-through;
-        color: #888;
-        margin-right: 0.5rem;
-    }
-    
-    .wishlist-item-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-    
-    .btn-add-to-cart {
-        flex: 1;
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        color: white;
-        border: none;
-        padding: 0.5rem;
-        border-radius: 0.25rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-    }
-    
-    .btn-add-to-cart:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
-    }
-    
-    .btn-add-to-cart.in-cart {
-        background: #28a745;
-    }
-    
-    .btn-remove-from-wishlist {
-        flex: 1;
-        background: white;
-        border: 1px solid #dc3545;
-        color: #dc3545;
-        padding: 0.5rem;
-        border-radius: 0.25rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        gap: 0.25rem;
-    }
-    
-    .btn-remove-from-wishlist:hover {
-        background: #dc3545;
-        color: white;
-    }
-    
-    .placeholder-img {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #e0e0e0;
-        color: #666;
-        font-size: 24px;
-    }
-
-    .btn-back {
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        border: none;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 0.875rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .btn-back:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
-    }
-</style>
 
 <div class="wishlist-container">
     <div class="wishlist-header">
         <h1 class="wishlist-title">Список желаемого</h1>
         <button onclick="history.back()" class="btn-back">
-            <i class="fas fa-arrow-left"></i>
             Назад
         </button>
     </div>
@@ -285,13 +59,13 @@
                                 $inCart = auth()->user()->cartItems()->where('game_id', $item->game->id)->exists();
                             @endphp
                             <button type="button" 
-                                    class="btn-add-to-cart {{ $inCart ? 'in-cart' : '' }}" 
+                                    class="btn-add-to-wishlist {{ $inCart ? 'in-cart' : '' }}" 
                                     data-game-id="{{ $item->game->id }}"
                                     onclick="toggleCartFromWishlist(this)">
                                 {{ $inCart ? 'В корзине' : 'В корзину' }}
                             </button>
                             <button type="button" 
-                                    class="btn-remove-from-wishlist" 
+                                    class="btn-remove-from-cart" 
                                     data-wishlist-id="{{ $item->id }}"
                                     data-game-id="{{ $item->game->id }}"
                                     onclick="removeFromWishlist(this)">

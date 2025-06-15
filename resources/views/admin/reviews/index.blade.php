@@ -80,18 +80,3 @@
     </div>
 @endsection
 
-<style>
-.admin-rating {
-    display: flex;
-    gap: 2px;
-}
-
-.admin-star {
-    color: #ddd;
-    font-size: 16px;
-}
-
-.admin-star.active {
-    color: #ffc107;
-}
-</style>

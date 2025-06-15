@@ -1,241 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<style>
-    .cart-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-    }
-    
-    .cart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-    
-    .cart-title {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0;
-    }
-    
-    .cart-empty {
-        text-align: center;
-        padding: 3rem 0;
-    }
-    
-    .cart-empty-message {
-        font-size: 1.25rem;
-        color: #666;
-        margin-bottom: 1.5rem;
-    }
-    
-    .btn-continue-shopping {
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        color: white;
-        border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-    }
-    
-    .btn-continue-shopping:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
-    }
-    
-    .cart-items {
-        margin-bottom: 2rem;
-    }
-    
-    .cart-item {
-        display: grid;
-        grid-template-columns: 100px 1fr auto;
-        gap: 1.5rem;
-        padding: 1.5rem;
-        background-color: #f8f8f8;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-    }
-    
-    .cart-item-image {
-        width: 100px;
-        height: 60px;
-        border-radius: 0.25rem;
-        overflow: hidden;
-        background-color: #e0e0e0;
-    }
-    
-    .cart-item-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .cart-item-details {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .cart-item-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-    
-    .cart-item-title a {
-        color: #333;
-        text-decoration: none;
-    }
-    
-    .cart-item-title a:hover {
-        color: #393A43;
-    }
-    
-    .cart-item-price {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #393A43;
-    }
-    
-    .cart-item-old-price {
-        font-size: 0.875rem;
-        text-decoration: line-through;
-        color: #888;
-        margin-right: 0.5rem;
-    }
-    
-    .cart-item-actions {
-        display: flex;
-        align-items: center;
-    }
-    
-    .btn-remove-item {
-        background: none;
-        border: none;
-        color: #dc3545;
-        cursor: pointer;
-        font-size: 1.25rem;
-        transition: color 0.3s;
-    }
-    
-    .btn-remove-item:hover {
-        color: #bd2130;
-    }
-    
-    .cart-summary {
-        background-color: #f8f8f8;
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-    }
-    
-    .cart-summary-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-    }
-    
-    .cart-summary-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .cart-summary-row:last-child {
-        border-bottom: none;
-    }
-    
-    .cart-summary-label {
-        color: #666;
-    }
-    
-    .cart-summary-value {
-        font-weight: 600;
-    }
-    
-    .cart-summary-total {
-        font-size: 1.25rem;
-        color: #393A43;
-    }
-    
-    .btn-checkout {
-        display: block;
-        width: 100%;
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        color: white;
-        border: none;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
-        font-size: 1.125rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-align: center;
-        text-decoration: none;
-        margin-top: 1.5rem;
-    }
-    
-    .btn-checkout:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
-    }
-    
-    .placeholder-img {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #e0e0e0;
-        color: #666;
-        font-size: 14px;
-    }
-
-    .btn-back {
-        background: linear-gradient(135deg, #393A43, #2c2d35);
-        border: none;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 0.875rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .btn-back:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(57, 58, 67, 0.3);
-    }
-    
-    @media (max-width: 768px) {
-        .cart-item {
-            grid-template-columns: 80px 1fr;
-        }
-        
-        .cart-item-actions {
-            grid-column: span 2;
-            justify-content: flex-end;
-            margin-top: 1rem;
-        }
-    }
-</style>
-
 <div class="cart-container">
     <div class="cart-header">
         <h1 class="cart-title">Корзина</h1>
         <button onclick="history.back()" class="btn-back">
-            <i class="fas fa-arrow-left"></i>
             Назад
         </button>
     </div>
@@ -243,13 +12,13 @@
     @if($cartItems->isEmpty())
         <div class="cart-empty">
             <p class="cart-empty-message">Ваша корзина пуста</p>
-            <a href="{{ route('games.index') }}" class="btn-continue-shopping">Перейти к играм</a>
+            <a href="{{ route('home') }}" class="btn-continue-shopping">Перейти к играм</a>
         </div>
     @else
         <div class="cart-content">
             <div class="cart-items">
                 @foreach($cartItems as $item)
-                    <div class="cart-item">
+                    <div class="cart-item" id="cart-item-{{ $item->id }}">
                         <div class="cart-item-image">
                             @php
                                 $imagePath = null;
@@ -263,28 +32,69 @@
                             @else
                                 <div class="placeholder-img">{{ substr($item->game->title, 0, 1) }}</div>
                             @endif
+                            
+                            @if($item->game->isOnDiscount())
+                                <div class="cart-item-discount">-{{ $item->game->getDiscountPercentage() }}%</div>
+                            @endif
                         </div>
-                        <div class="cart-item-details">
+                        <div class="cart-item-content">
                             <h3 class="cart-item-title">
                                 <a href="{{ route('games.show', $item->game) }}">{{ $item->game->title }}</a>
                             </h3>
+                            <div class="cart-item-genres">
+                                @foreach($item->game->genres->take(2) as $genre)
+                                    <span class="cart-item-genre">{{ $genre->name }}</span>
+                                @endforeach
+                            </div>
+                            
+                            @php
+                                $averageRating = $item->game->reviews->avg('rating') ?? 0;
+                                $reviewsCount = $item->game->reviews->count();
+                            @endphp
+                            
+                            @if($reviewsCount > 0)
+                                <div class="rating">
+                                    <div class="rating-stars">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <span class="rating-star {{ $i <= round($averageRating) ? 'active' : '' }}">★</span>
+                                        @endfor
+                                    </div>
+                                    <span class="rating-text">{{ number_format($averageRating, 1) }} ({{ $reviewsCount }} {{ $reviewsCount == 1 ? 'отзыв' : ($reviewsCount < 5 ? 'отзыва' : 'отзывов') }})</span>
+                                </div>
+                            @endif
+                            
                             <div class="cart-item-price">
                                 @if($item->game->isOnDiscount())
                                     <span class="cart-item-old-price">{{ number_format($item->game->price, 0, ',', ' ') }} ₽</span>
-                                    {{ number_format($item->game->discount_price, 0, ',', ' ') }} ₽
+                                    <span class="cart-item-current-price">{{ number_format($item->game->discount_price, 0, ',', ' ') }} ₽</span>
                                 @else
-                                    {{ number_format($item->game->price, 0, ',', ' ') }} ₽
+                                    <span class="cart-item-current-price">{{ number_format($item->game->price, 0, ',', ' ') }} ₽</span>
                                 @endif
                             </div>
-                        </div>
-                        <div class="cart-item-actions">
-                            <form action="{{ route('cart.remove', $item) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-remove-item" title="Удалить из корзины">
+                            <div class="cart-item-actions">
+                                <button type="button" 
+                                        class="btn-remove-from-cart" 
+                                        data-cart-id="{{ $item->id }}"
+                                        onclick="removeFromCart(this)">
                                     <i class="fas fa-trash"></i>
+                                    Убрать
                                 </button>
-                            </form>
+                                @php
+                                    $inWishlist = auth()->user()->wishlistItems()->where('game_id', $item->game->id)->exists();
+                                @endphp
+                                <button type="button" 
+                                        class="btn-add-to-wishlist {{ $inWishlist ? 'in-wishlist' : '' }}" 
+                                        data-game-id="{{ $item->game->id }}"
+                                        onclick="toggleWishlist(this)">
+                                    @if($inWishlist)
+                                        <i class="fas fa-heart"></i>
+                                        В избранном
+                                    @else
+                                        <i class="far fa-heart"></i>
+                                        В избранное
+                                    @endif
+                                </button>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -305,4 +115,137 @@
         </div>
     @endif
 </div>
+
+<script>
+function removeFromCart(button) {
+    const cartId = button.getAttribute('data-cart-id');
+    const cartItem = document.getElementById(`cart-item-${cartId}`);
+    
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Удаляем...';
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch(`/cart/remove/${cartId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            cartItem.remove();
+            updateCartCounter();
+            
+            const cartItems = document.querySelector('.cart-items');
+            if (cartItems && cartItems.children.length === 0) {
+                location.reload();
+            }
+        } else {
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-trash"></i> Убрать';
+    });
+}
+
+function toggleWishlist(button) {
+    const gameId = button.getAttribute('data-game-id');
+    const isInWishlist = button.classList.contains('in-wishlist');
+    
+    button.disabled = true;
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    if (isInWishlist) {
+        fetch(`/wishlist/remove-by-game/${gameId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                button.classList.remove('in-wishlist');
+                button.innerHTML = '<i class="far fa-heart"></i> В избранное';
+                updateWishlistCounter();
+            } else {
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
+    } else {
+        fetch(`/wishlist/add/${gameId}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                button.classList.add('in-wishlist');
+                button.innerHTML = '<i class="fas fa-heart"></i> В избранном';
+                updateWishlistCounter();
+            } else {
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            button.disabled = false;
+        });
+    }
+}
+
+function updateCartCounter() {
+    const cartCounter = document.querySelector('.header-icon-badge');
+    if (cartCounter) {
+        let currentCount = parseInt(cartCounter.textContent) || 0;
+        currentCount = Math.max(0, currentCount - 1);
+        cartCounter.textContent = currentCount;
+        cartCounter.style.display = currentCount > 0 ? 'block' : 'none';
+    }
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => document.body.removeChild(toast), 300);
+    }, 3000);
+}
+</script>
 @endsection
