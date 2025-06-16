@@ -12,11 +12,6 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -25,63 +20,36 @@ class User extends Authenticatable
         'is_admin',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_admin' => 'boolean',
     ];
 
-    /**
-     * Check if the user is an admin.
-     *
-     * @return bool
-     */
     public function isAdmin()
     {
         return $this->is_admin;
     }
 
-    /**
-     * Get the cart items for the user.
-     */
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
     }
 
-    /**
-     * Get the wishlist items for the user.
-     */
     public function wishlistItems()
     {
         return $this->hasMany(WishlistItem::class);
     }
 
-    /**
-     * Get the reviews for the user.
-     */
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
 
-    /**
-     * Get the purchases for the user.
-     */
     public function purchases()
     {
         return $this->hasMany(Purchase::class);

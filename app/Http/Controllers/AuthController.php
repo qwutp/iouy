@@ -14,32 +14,17 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
-    
-    /**
-     * Show the login form.
-     *
-     * @return \Illuminate\View\View
-     */
+
     public function showLoginForm()
     {
         return view('auth.login');
     }
-    
-    /**
-     * Handle a login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+
     public function login(Request $request)
     {
         $request->validate([
@@ -60,13 +45,7 @@ class AuthController extends Controller
             'email' => 'Неверные учетные данные.',
         ])->withInput($request->except('password'));
     }
-    
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+
     public function logout(Request $request)
     {
         Auth::logout();
@@ -76,27 +55,15 @@ class AuthController extends Controller
         
         return redirect('/');
     }
-    
-    /**
-     * Show the registration form.
-     *
-     * @return \Illuminate\View\View
-     */
+
     public function showRegistrationForm()
     {
         return view('auth.register');
     }
-    
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+
     public function register(Request $request)
     {
         try {
-            // Валидация данных
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -105,7 +72,6 @@ class AuthController extends Controller
             
             Log::info('Attempting to create user', ['email' => $validatedData['email']]);
             
-            // Проверяем подключение к базе данных
             try {
                 DB::connection()->getPdo();
                 Log::info('Database connection successful');
@@ -114,7 +80,6 @@ class AuthController extends Controller
                 return back()->withErrors(['email' => 'Ошибка подключения к базе данных.'])->withInput();
             }
             
-            // Создаем пользователя
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
@@ -124,7 +89,6 @@ class AuthController extends Controller
             
             Log::info('User created successfully', ['user_id' => $user->id]);
             
-            // Автоматически входим в систему
             Auth::login($user);
             
             return redirect('/')->with('success', 'Регистрация прошла успешно!');
@@ -143,23 +107,12 @@ class AuthController extends Controller
             ])->withInput();
         }
     }
-    
-    /**
-     * Show the forgot password form.
-     *
-     * @return \Illuminate\View\View
-     */
+
     public function showForgotPasswordForm()
     {
         return view('auth.forgot-password');
     }
-    
-    /**
-     * Send a reset link to the given user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+
     public function sendResetLink(Request $request)
     {
         $request->validate([
@@ -174,24 +127,12 @@ class AuthController extends Controller
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
     }
-    
-    /**
-     * Show the reset password form.
-     *
-     * @param  string  $token
-     * @return \Illuminate\View\View
-     */
+ 
     public function showResetPasswordForm($token)
     {
         return view('auth.reset-password', ['token' => $token]);
     }
-    
-    /**
-     * Reset the given user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+
     public function resetPassword(Request $request)
     {
         $request->validate([

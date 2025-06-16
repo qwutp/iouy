@@ -54,7 +54,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/reviews/{review}/unlike', [ReviewController::class, 'unlike'])->name('reviews.unlike');
 });
 
-// Маршруты администратора - используем полное имя класса middleware
 Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/games', [AdminController::class, 'games'])->name('admin.games');

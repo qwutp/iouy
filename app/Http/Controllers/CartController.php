@@ -8,14 +8,10 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    /**
-     * Display the user's cart.
-     */
     public function index()
     {
         $cartItems = auth()->user()->cartItems()->with('game.images')->get();
         
-        // Calculate total price
         $total = 0;
         foreach ($cartItems as $item) {
             if ($item->game->isOnDiscount()) {
@@ -28,16 +24,11 @@ class CartController extends Controller
         return view('cart.index', compact('cartItems', 'total'));
     }
     
-    /**
-     * Add a game to the user's cart.
-     */
     public function add(Game $game)
     {
-        // Check if the game is already in the cart
         $existingItem = auth()->user()->cartItems()->where('game_id', $game->id)->first();
         
         if (!$existingItem) {
-            // Add the game to the cart (without quantity field)
             auth()->user()->cartItems()->create([
                 'game_id' => $game->id
             ]);
@@ -49,12 +40,8 @@ class CartController extends Controller
         ]);
     }
     
-    /**
-     * Remove a game from the user's cart.
-     */
     public function remove(CartItem $cartItem)
     {
-        // Check if the cart item belongs to the authenticated user
         if ($cartItem->user_id !== auth()->id()) {
             return response()->json([
                 'success' => false,
@@ -70,9 +57,6 @@ class CartController extends Controller
         ]);
     }
     
-    /**
-     * Remove a game from the user's cart by game ID.
-     */
     public function removeByGame($gameId)
     {
         $cartItem = auth()->user()->cartItems()->where('game_id', $gameId)->first();
@@ -92,18 +76,12 @@ class CartController extends Controller
         ]);
     }
     
-    /**
-     * Get the count of items in the user's cart.
-     */
     public function getCount()
     {
         $count = auth()->user()->cartItems()->count();
         return response()->json(['count' => $count]);
     }
     
-    /**
-     * Show the checkout page.
-     */
     public function checkout()
     {
         $cartItems = auth()->user()->cartItems()->with('game')->get();
@@ -112,7 +90,6 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Ваша корзина пуста');
         }
         
-        // Calculate total for checkout
         $total = 0;
         foreach ($cartItems as $item) {
             if ($item->game->isOnDiscount()) {

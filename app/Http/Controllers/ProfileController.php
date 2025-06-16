@@ -79,7 +79,6 @@ class ProfileController extends Controller
         
         $user = auth()->user();
         
-        // Удалить старый аватар
         if ($user->avatar) {
             $oldPath = public_path('images/avatars/' . $user->avatar);
             if (file_exists($oldPath)) {
@@ -87,13 +86,11 @@ class ProfileController extends Controller
             }
         }
         
-        // Создать директорию если не существует
         $avatarDir = public_path('images/avatars');
         if (!file_exists($avatarDir)) {
             mkdir($avatarDir, 0755, true);
         }
         
-        // Сохранить новый аватар
         $fileName = time() . '.' . $request->file('avatar')->getClientOriginalExtension();
         $request->file('avatar')->move($avatarDir, $fileName);
         

@@ -15,7 +15,6 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        // Проверяем права администратора в конструкторе
         $this->middleware(function ($request, $next) {
             if (!auth()->check() || !auth()->user()->is_admin) {
                 abort(403, 'Доступ запрещен. Требуются права администратора.');
@@ -68,7 +67,6 @@ class AdminController extends Controller
         ]);
         
         try {
-            // Создаем игру
             $game = Game::create([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -81,16 +79,13 @@ class AdminController extends Controller
                 'is_on_sale' => $request->has('is_on_sale'),
             ]);
             
-            // Привязываем жанры
             $game->genres()->attach($request->genres);
             
-            // Создаем директорию если не существует
             $gamesDir = public_path('images/games');
             if (!file_exists($gamesDir)) {
                 mkdir($gamesDir, 0755, true);
             }
             
-            // Загружаем изображения
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
                     $fileName = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
@@ -142,7 +137,6 @@ class AdminController extends Controller
         ]);
         
         try {
-            // Update game data
             $game->update([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -155,10 +149,8 @@ class AdminController extends Controller
                 'is_on_sale' => $request->has('is_on_sale'),
             ]);
             
-            // Sync genres
             $game->genres()->sync($request->genres);
             
-            // Handle image deletion
             if ($request->has('delete_images')) {
                 foreach ($request->delete_images as $imageId) {
                     $image = GameImage::where('id', $imageId)->where('game_id', $game->id)->first();
@@ -173,18 +165,15 @@ class AdminController extends Controller
                 }
             }
             
-            // Create directory if it doesn't exist
             $gamesDir = public_path('images/games');
             if (!file_exists($gamesDir)) {
                 mkdir($gamesDir, 0755, true);
             }
             
-            // Handle new images
             if ($request->hasFile('new_images')) {
                 $currentImageCount = $game->images()->count();
                 $newImageCount = count($request->file('new_images'));
                 
-                // Check if total images would exceed 6
                 if ($currentImageCount + $newImageCount > 6) {
                     return back()->withErrors(['new_images' => 'Максимальное количество изображений: 6. У игры уже ' . $currentImageCount . ' изображений.'])->withInput();
                 }
@@ -204,12 +193,9 @@ class AdminController extends Controller
                 }
             }
             
-            // Handle primary image change
             if ($request->has('primary_image') && $request->primary_image) {
-                // Reset all images to non-primary
                 GameImage::where('game_id', $game->id)->update(['is_primary' => false]);
                 
-                // Set the selected image as primary
                 GameImage::where('id', $request->primary_image)
                     ->where('game_id', $game->id)
                     ->update(['is_primary' => true]);
@@ -285,26 +271,20 @@ class AdminController extends Controller
     public function updateBanner(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'background_color' => 'required|string|max:7',
         ]);
         
         $banner = Banner::firstOrNew();
         
-        $banner->title = $request->title;
-        $banner->subtitle = $request->subtitle;
         $banner->background_color = $request->background_color;
         
         if ($request->hasFile('background_image')) {
-            // Создать директорию если не существует
             $bannersDir = public_path('images/banners');
             if (!file_exists($bannersDir)) {
                 mkdir($bannersDir, 0755, true);
             }
             
-            // Удалить старое изображение
             if ($banner->background_image) {
                 $oldPath = public_path('images/banners/' . $banner->background_image);
                 if (file_exists($oldPath)) {
@@ -312,7 +292,6 @@ class AdminController extends Controller
                 }
             }
             
-            // Сохранить новое изображение
             $fileName = time() . '.' . $request->file('background_image')->getClientOriginalExtension();
             $request->file('background_image')->move($bannersDir, $fileName);
             $banner->background_image = $fileName;
