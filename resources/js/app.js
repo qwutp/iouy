@@ -1,13 +1,13 @@
 import "./bootstrap"
-import { createApp } from "vue"
+// import { createApp } from "vue"
 
-import GameCard from "./components/GameCard.vue"
-import GameGallery from "./components/GameGallery.vue"
-import ReviewForm from "./components/ReviewForm.vue"
-import ReviewList from "./components/ReviewList.vue"
-import FilterSidebar from "./components/FilterSidebar.vue"
-import Carousel from "./components/Carousel.vue"
-import MessageToast from "./components/MessageToast.vue"
+// import GameCard from "./components/GameCard.vue"
+// import GameGallery from "./components/GameGallery.vue"
+// import ReviewForm from "./components/ReviewForm.vue"
+// import ReviewList from "./components/ReviewList.vue"
+// import FilterSidebar from "./components/FilterSidebar.vue"
+// import Carousel from "./components/Carousel.vue"
+// import MessageToast from "./components/MessageToast.vue"
 
 const app = createApp({
   data() {
