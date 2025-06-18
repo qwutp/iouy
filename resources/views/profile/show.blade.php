@@ -26,7 +26,7 @@
                     <a href="{{ route('cart.index') }}" class="profile-btn">Моя корзина</a>
                     <a href="{{ route('wishlist.index') }}" class="profile-btn">Список желаемого</a>
                     <a href="{{ route('profile.settings') }}" class="profile-btn profile-btn-primary">Редактировать профиль</a>
-                    <a href="{{ route('profile.purchases') }}" class="profile-btn">История покупок</a>
+                    <a href="" class="profile-btn">История покупок</a>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
                         <button type="submit" class="profile-btn profile-btn-danger">Выйти</button>

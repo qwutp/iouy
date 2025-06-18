@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Проверяем, существует ли таблица users
         if (!Schema::hasTable('users')) {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
@@ -24,7 +23,6 @@ return new class extends Migration
                 $table->timestamps();
             });
         } else {
-            // Если таблица существует, проверяем и добавляем недостающие поля
             Schema::table('users', function (Blueprint $table) {
                 if (!Schema::hasColumn('users', 'is_admin')) {
                     $table->boolean('is_admin')->default(false)->after('password');
