@@ -30,18 +30,4 @@ class Review extends Model
         return $this->belongsTo(Game::class);
     }
 
-    public function likes()
-    {
-        return $this->hasMany(ReviewLike::class);
-    }
-
-    public function getLikesCountAttribute()
-    {
-        return $this->likes()->count();
-    }
-
-    public function isLikedByUser($userId)
-    {
-        return $this->likes()->where('user_id', $userId)->exists();
-    }
 }

@@ -61,11 +61,6 @@ class Game extends Model
         return $this->hasMany(WishlistItem::class);
     }
 
-    public function purchaseItems()
-    {
-        return $this->hasMany(PurchaseItem::class);
-    }
-
     public function isOnDiscount()
     {
         return $this->discount_price !== null && $this->discount_price < $this->price;
