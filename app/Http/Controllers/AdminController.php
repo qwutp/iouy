@@ -85,6 +85,8 @@ class AdminController extends Controller
             }
             
             if ($request->hasFile('images')) {
+                $primaryImageIndex = $request->primary_image;
+                
                 foreach ($request->file('images') as $index => $image) {
                     $fileName = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $image->move($gamesDir, $fileName);
@@ -92,7 +94,7 @@ class AdminController extends Controller
                     GameImage::create([
                         'game_id' => $game->id,
                         'image_path' => $fileName,
-                        'is_primary' => $index == $request->primary_image,
+                        'is_primary' => $index == $primaryImageIndex,
                         'order' => $index,
                     ]);
                 }
@@ -107,7 +109,9 @@ class AdminController extends Controller
     
     public function editGame(Game $game)
     {
-        $game->load(['images', 'genres']);
+        $game->load(['images' => function($query) {
+            $query->orderBy('order', 'asc');
+        }, 'genres']);
         $genres = Genre::all();
         
         return view('admin.games.edit', compact('game', 'genres'));
@@ -217,7 +221,7 @@ class AdminController extends Controller
         
         $game->delete();
         
-        return redirect()->route('admin.games')->with('success', 'Game deleted successfully.');
+        return redirect()->route('admin.games')->with('success', 'Игра удалена успешно.');
     }
     
     public function users()
@@ -230,7 +234,7 @@ class AdminController extends Controller
     public function destroyUser(User $user)
     {
         if ($user->is_admin && $user->id === auth()->id()) {
-            return back()->withErrors(['error' => 'Вы не можете удалить свой собственный аккаунт администратора.']);
+            return back()->withErrors(['error' => 'Вы не можете удалить свой собственный аккаунт.']);
         }
         
         if ($user->avatar) {
@@ -256,7 +260,7 @@ class AdminController extends Controller
     {
         $review->delete();
         
-        return redirect()->route('admin.reviews')->with('success', 'Review deleted successfully.');
+        return redirect()->route('admin.reviews')->with('success', 'Отзыв удален успешно.');
     }
     
     public function editBanner()
@@ -270,12 +274,10 @@ class AdminController extends Controller
     {
         $request->validate([
             'background_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'background_color' => 'required|string|max:7',
         ]);
         
         $banner = Banner::firstOrNew();
         
-        $banner->background_color = $request->background_color;
         
         if ($request->hasFile('background_image')) {
             $bannersDir = public_path('images/banners');

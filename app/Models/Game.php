@@ -14,9 +14,6 @@ class Game extends Model
         'description',
         'price',
         'discount_price',
-        'developer',
-        'publisher',
-        'release_date',
         'system_requirements',
         'recommended_requirements',
         'is_featured',
@@ -25,7 +22,6 @@ class Game extends Model
     ];
 
     protected $casts = [
-        'release_date' => 'date',
         'is_featured' => 'boolean',
         'is_new' => 'boolean',
         'is_on_sale' => 'boolean',
@@ -33,12 +29,23 @@ class Game extends Model
 
     public function images()
     {
-        return $this->hasMany(GameImage::class);
+        return $this->hasMany(GameImage::class)->orderBy('order', 'asc');
     }
 
     public function primaryImage()
     {
-        return $this->hasOne(GameImage::class)->orderBy('id', 'asc');
+        return $this->hasOne(GameImage::class)->where('is_primary', true);
+    }
+
+    public function firstImage()
+    {
+        return $this->hasOne(GameImage::class)->orderBy('order', 'asc');
+    }
+
+    public function mainImage()
+    {
+        $primary = $this->primaryImage;
+        return $primary ?: $this->firstImage;
     }
 
     public function genres()
@@ -60,6 +67,7 @@ class Game extends Model
     {
         return $this->hasMany(WishlistItem::class);
     }
+
 
     public function isOnDiscount()
     {

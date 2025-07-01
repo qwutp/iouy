@@ -2503,11 +2503,7 @@ img {
         display: flex;
         gap: 0.125rem;
     }
-    
-    .rating-star {
-        color: #ffd700;
-        font-size: 0.875rem;
-    }
+
     
     .rating-star.empty {
         color: #ddd;
