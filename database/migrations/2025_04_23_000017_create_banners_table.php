@@ -10,10 +10,7 @@ return new class extends Migration
     {
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('subtitle');
             $table->string('background_image')->nullable();
-            $table->string('background_color')->default('#393A43');
             $table->timestamps();
         });
     }
