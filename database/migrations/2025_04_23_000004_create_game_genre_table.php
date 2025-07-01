@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('game_id')->constrained()->onDelete('cascade');
             $table->foreignId('genre_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

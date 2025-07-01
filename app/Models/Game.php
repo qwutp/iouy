@@ -21,14 +21,14 @@ class Game extends Model
         'recommended_requirements',
         'is_featured',
         'is_new',
-        'is_bestseller',
+        'is_on_sale',
     ];
 
     protected $casts = [
         'release_date' => 'date',
         'is_featured' => 'boolean',
         'is_new' => 'boolean',
-        'is_bestseller' => 'boolean',
+        'is_on_sale' => 'boolean',
     ];
 
     public function images()
