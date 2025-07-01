@@ -7,7 +7,6 @@ use App\Models\GameImage;
 use App\Models\Genre;
 use App\Models\Review;
 use App\Models\User;
-use App\Models\Purchase;
 use App\Models\Banner;
 use Illuminate\Http\Request;
 
@@ -28,9 +27,8 @@ class AdminController extends Controller
         $gamesCount = Game::count();
         $usersCount = User::count();
         $reviewsCount = Review::count();
-        $purchasesCount = Purchase::count();
         
-        return view('admin.dashboard', compact('gamesCount', 'usersCount', 'reviewsCount', 'purchasesCount'));
+        return view('admin.dashboard', compact('gamesCount', 'usersCount', 'reviewsCount'));
     }
     
     public function games()

@@ -16,10 +16,6 @@ class Review extends Model
         'content',
     ];
 
-    protected $appends = [
-        'likes_count',
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);

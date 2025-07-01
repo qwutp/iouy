@@ -45,13 +45,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/wishlist/remove-by-game/{gameId}', [WishlistController::class, 'removeByGame'])->name('wishlist.removeByGame');
     Route::get('/wishlist/count', [WishlistController::class, 'getCount'])->name('wishlist.count');
     
-    Route::get('/purchases', [ProfileController::class, 'purchases'])->name('profile.purchases');
-    
+        
     Route::post('/games/{game}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
-    Route::post('/reviews/{review}/like', [ReviewController::class, 'like'])->name('reviews.like');
-    Route::delete('/reviews/{review}/unlike', [ReviewController::class, 'unlike'])->name('reviews.unlike');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {

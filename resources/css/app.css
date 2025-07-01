@@ -1506,18 +1506,6 @@ img {
   gap: 1rem;
 }
 
-.review-item-like {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: var(--color-secondary);
-  font-size: 0.875rem;
-}
-
-.review-item-like.active {
-  color: var(--color-success);
-}
-
 .review-item-delete {
   color: var(--color-error);
   font-size: 0.875rem;
@@ -2370,8 +2358,8 @@ img {
     }
 
     /*страница поиска игр*/
-     .search-page {
-        min-height: 60vh;
+    .search-page {
+        min-height: 80vh;
         padding: 2rem 0;
     }
     
@@ -2383,6 +2371,7 @@ img {
     
     .search-results-header {
         margin-bottom: 2rem;
+        text-align: center;
     }
     
     .search-title {
@@ -2394,6 +2383,7 @@ img {
     
     .search-count {
         font-size: 1.125rem;
+        color: #666;
         font-weight: 500;
     }
     
@@ -2462,7 +2452,7 @@ img {
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
-        background-color: var(--color-error);
+        background-color: #dc3545;
         color: white;
         padding: 0.25rem 0.5rem;
         border-radius: 0.25rem;
@@ -2494,6 +2484,7 @@ img {
     }
     
     .game-title a {
+        color: #333;
         text-decoration: none;
     }
     
@@ -2508,6 +2499,19 @@ img {
         gap: 0.5rem;
     }
     
+    .rating-stars {
+        display: flex;
+        gap: 0.125rem;
+    }
+    
+    .rating-star {
+        color: #ffd700;
+        font-size: 0.875rem;
+    }
+    
+    .rating-star.empty {
+        color: #ddd;
+    }
     
     .rating-text {
         font-size: 0.875rem;
@@ -2555,19 +2559,19 @@ img {
     
     .btn-cart {
         flex: 1;
-        background: var(--color-accent);
+        background: linear-gradient(135deg, #393A43, #2c2d35);
         color: white;
         border: none;
         padding: 0.5rem;
-        border-radius: 0.5rem;
+        border-radius: 0.25rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
+        text-decoration: none;
         text-align: center;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.25rem;
     }
     
     .btn-cart:hover {
@@ -2590,20 +2594,17 @@ img {
     }
     
     .btn-wishlist {
-        flex: 1;
-        background: var(--color-accent);
-        color: white;
-        border: none;
+        background: white;
+        border: 1px solid #393A43;
+        color: #393A43;
         padding: 0.5rem;
-        border-radius: 0.5rem;
-        font-weight: 600;
+        border-radius: 0.25rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        text-align: center;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.25rem;
+        font-size: 1rem;
     }
     
     .btn-wishlist:hover {

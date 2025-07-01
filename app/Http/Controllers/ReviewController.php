@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Models\Game;
-use App\Models\ReviewLike;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -70,34 +69,4 @@ class ReviewController extends Controller
         return back()->with('success', 'Отзыв успешно удален.');
     }
 
-    public function like(Review $review)
-    {
-        $existingLike = ReviewLike::where('user_id', auth()->id())
-            ->where('review_id', $review->id)
-            ->first();
-            
-        if (!$existingLike) {
-            ReviewLike::create([
-                'user_id' => auth()->id(),
-                'review_id' => $review->id,
-            ]);
-        }
-        
-        return response()->json([
-            'success' => true,
-            'likes_count' => $review->likes()->count(),
-        ]);
     }
-    
-    public function unlike(Review $review)
-    {
-        ReviewLike::where('user_id', auth()->id())
-            ->where('review_id', $review->id)
-            ->delete();
-            
-        return response()->json([
-            'success' => true,
-            'likes_count' => $review->likes()->count(),
-        ]);
-    }
-}

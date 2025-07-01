@@ -18,7 +18,7 @@ class ProfileController extends Controller
     public function show()
     {
         $user = auth()->user();
-        $user->load(['purchases.items.game.primaryImage', 'reviews.game']);
+        $user->load(['reviews.game']);
         return view('profile.show', compact('user'));
     }
     

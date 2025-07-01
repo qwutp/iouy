@@ -55,12 +55,12 @@ class GameController extends Controller
 
     public function show(Game $game)
     {
-        $game->load(['images', 'genres', 'reviews.user', 'reviews.likes']);
+        $game->load(['images', 'genres', 'reviews.user']);
         
         $game->average_rating = $game->getAverageRating();
         $game->reviews_count = $game->getReviewsCount();
         
-        $reviews = $game->reviews()->with('user', 'likes')->get();
+        $reviews = $game->reviews()->with('user')->get();
         
         return view('games.show', compact('game', 'reviews'));
     }
