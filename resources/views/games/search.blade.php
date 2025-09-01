@@ -59,7 +59,7 @@
                                 <div class="game-rating">
                                     <div class="rating-stars">
                                         @for($i = 1; $i <= 5; $i++)
-                                            <span class="rating-star {{ $i <= round($game->average_rating) ? '' : 'empty' }}">★</span>
+                                            <span class="rating-star {{ $i <= round($game->average_rating) ? 'active' : 'empty' }}">★</span>
                                         @endfor
                                     </div>
                                     <span class="rating-text">

@@ -3,6 +3,9 @@
 @section('content')
     <div class="container">
         <div class="admin-header">
+            <div class="admin-header-top">
+                <a href="{{ route('admin.dashboard') }}" class="admin-back-btn">← Назад к панели управления</a>
+            </div>
             <h1 class="admin-header-title">Редактирование баннера</h1>
             <p class="admin-header-subtitle">Изменение содержимого главного баннера сайта</p>
             
@@ -42,15 +45,7 @@
                             <div class="auth-form-error">{{ $message }}</div>
                         @enderror
                     </div>
-                    
-                    <div class="admin-form-group">
-                        <label for="background_color">Цвет фона (если нет изображения)</label>
-                        <input type="color" id="background_color" name="background_color" value="{{ old('background_color', $banner->background_color ?? '#393A43') }}">
-                        @error('background_color')
-                            <div class="auth-form-error">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    
+                                
                     <div class="admin-form-actions">
                         <button type="submit" class="admin-btn admin-btn-primary">Сохранить изменения</button>
                         <a href="{{ route('admin.dashboard') }}" class="admin-btn">Отмена</a>

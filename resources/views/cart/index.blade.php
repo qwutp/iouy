@@ -108,9 +108,9 @@
                 </div>
                 <div class="cart-summary-row">
                     <span class="cart-summary-label">Сумма</span>
-                    <span class="cart-summary-value cart-summary-total">{{ number_format($total, 0, ',', ' ') }} ₽</span>
+                    <span class="cart-summary-value">{{ number_format($total, 0, ',', ' ') }} ₽</span>
                 </div>
-                <a href="{{ route('cart.checkout') }}" class="btn-checkout">Оформить заказ</a>
+                <a href="{{ route('cart.checkout') }}" class="btn-checkout">Оплатить</a>
             </div>
         </div>
     @endif
