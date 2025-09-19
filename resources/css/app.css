@@ -1869,13 +1869,15 @@ img {
     
     .cart-content {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 2rem;
+    grid-template-columns: 1fr 300px; 
+    gap: 2rem;
+    align-items: start;
     }
     
     .cart-items {
-        display: inline-flex;
-        gap: 1.5rem;
+       display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
     }
     
     .cart-item {
@@ -1883,7 +1885,6 @@ img {
         border-radius: 0.5rem;
         overflow: hidden;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        width: 280px;
     }
     
     .cart-item:hover {
@@ -2058,11 +2059,14 @@ img {
     
     .cart-summary {
         background-color: #f8f8f8;
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        height: fit-content;
-        position: sticky;
-        top: 2rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 100px; 
+    align-self: start;
+    max-height: calc(100vh - 120px); 
+    overflow-y: auto;
     }
     
     .cart-summary-title {
