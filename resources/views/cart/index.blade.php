@@ -110,7 +110,7 @@
                     <span class="cart-summary-label">Сумма</span>
                     <span class="cart-summary-value">{{ number_format($total, 0, ',', ' ') }} ₽</span>
                 </div>
-                <a href="{{ route('cart.checkout') }}" class="btn-checkout">Оплатить</a>
+                <a href="" class="btn-checkout">Оплатить</a>
             </div>
         </div>
     @endif

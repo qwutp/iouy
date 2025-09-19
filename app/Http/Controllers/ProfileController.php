@@ -99,9 +99,4 @@ class ProfileController extends Controller
         return back()->with('success', 'Аватар обновлен успешно.');
     }
     
-    public function purchases()
-    {
-        $purchases = auth()->user()->purchases()->with('items.game.primaryImage')->get();
-        return view('profile.purchases', compact('purchases'));
-    }
 }

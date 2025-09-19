@@ -72,14 +72,6 @@ class AuthController extends Controller
             
             Log::info('Attempting to create user', ['email' => $validatedData['email']]);
             
-            try {
-                DB::connection()->getPdo();
-                Log::info('Database connection successful');
-            } catch (\Exception $e) {
-                Log::error('Database connection failed', ['error' => $e->getMessage()]);
-                return back()->withErrors(['email' => 'Ошибка подключения к базе данных.'])->withInput();
-            }
-            
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
